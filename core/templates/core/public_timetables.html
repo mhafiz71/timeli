@@ -15,6 +15,27 @@
                         Browse all available master timetables in the system
                     </p>
                 </div>
+                <!-- Filter Buttons -->
+                <div class="flex flex-wrap gap-2 mt-4 lg:mt-0">
+                    <button onclick="filterTimetables('all')" class="filter-btn active" data-type="all">
+                        All Types
+                    </button>
+                    <button onclick="filterTimetables('teaching')" class="filter-btn" data-type="teaching">
+                        Teaching
+                    </button>
+                    <button onclick="filterTimetables('exam')" class="filter-btn" data-type="exam">
+                        Exams
+                    </button>
+                    <button onclick="filterTimetables('personal')" class="filter-btn" data-type="personal">
+                        Personal
+                    </button>
+                    <button onclick="filterTimetables('event')" class="filter-btn" data-type="event">
+                        Events
+                    </button>
+                    <button onclick="filterTimetables('other')" class="filter-btn" data-type="other">
+                        Other
+                    </button>
+                </div>
                 <div class="flex items-center space-x-4">
                     <div class="inline-flex items-center px-3 py-1 rounded-lg bg-blue-500/20 text-blue-300 text-sm font-medium">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,11 +63,23 @@
         {% if timetables %}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for tt in timetables %}
-            <div class="glass-card p-6 rounded-lg border border-white/10 hover:border-white/20 transition-all duration-300 card-hover fade-in">
+            <div class="glass-card p-6 rounded-lg border border-white/10 hover:border-white/20 transition-all duration-300 card-hover fade-in timetable-card"
+                data-type="{{ tt.timetable_type }}">
                 <!-- Timetable Header -->
                 <div class="flex items-start justify-between mb-4">
                     <div class="flex-1">
-                        <h3 class="text-xl font-semibold text-white mb-2">{{ tt.display_name }}</h3>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h3 class="text-xl font-semibold text-white">{{ tt.display_name }}</h3>
+                            <span
+                                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
+                                                                                                        {% if tt.timetable_type == 'teaching' %}bg-blue-500/20 text-blue-300
+                                                                                                        {% elif tt.timetable_type == 'exam' %}bg-red-500/20 text-red-300
+                                                                                                        {% elif tt.timetable_type == 'personal' %}bg-green-500/20 text-green-300
+                                                                                                        {% elif tt.timetable_type == 'event' %}bg-purple-500/20 text-purple-300
+                                                                                                        {% else %}bg-gray-500/20 text-gray-300{% endif %}">
+                                {{ tt.get_timetable_type_display }}
+                            </span>
+                        </div>
                         {% if tt.description %}
                         <p class="text-gray-300 text-sm mb-3 leading-relaxed">{{ tt.description }}</p>
                         {% endif %}
@@ -132,7 +165,8 @@
                 Upload First Timetable
             </a>
             {% else %}
-            <p class="text-gray-500 text-sm">Please contact an administrator to upload timetables.</p>
+            <p class="text-gray-500 text-sm">Please <a href="mailto:abdulnasirmhafiz567@gmail.com"
+                    class="text-blue-400 hover:text-blue-300 underline">contact an administrator</a> to upload timetables.</p>
             {% endif %}
         </div>
         {% endif %}
@@ -152,4 +186,36 @@
         </div>
     </div>
 </div>
+<style>
+    .filter-btn {
+        @apply px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-white/20 text-gray-300 hover:text-white hover:bg-white/10;
+    }
+
+    .filter-btn.active {
+        @apply bg-blue-500/20 text-blue-300 border-blue-500/30;
+    }
+
+    .timetable-card.hidden {
+        display: none;
+    }
+</style>
+
+<script>
+    function filterTimetables(type) {
+        // Update active button
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`[data-type="${type}"]`).classList.add('active');
+
+        // Filter cards
+        document.querySelectorAll('.timetable-card').forEach(card => {
+            if (type === 'all' || card.dataset.type === type) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+    }
+</script>
 {% endblock %}

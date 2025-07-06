@@ -322,28 +322,99 @@ class AdminDashboardView(LoginRequiredMixin, View):
     def get(self, request):
         form = TimetableSourceForm()
         timetables = TimetableSource.objects.all().order_by('-created_at')
-        return render(request, 'core/admin_dashboard.html', {'form': form, 'timetables': timetables})
+        edit_id = request.GET.get('edit')
+        edit_form = None
+
+        if edit_id:
+            try:
+                edit_timetable = TimetableSource.objects.get(id=edit_id)
+                edit_form = TimetableSourceForm(instance=edit_timetable)
+            except TimetableSource.DoesNotExist:
+                messages.error(request, 'Timetable not found.')
+
+        return render(request, 'core/admin_dashboard.html', {
+            'form': form,
+            'timetables': timetables,
+            'edit_form': edit_form,
+            'edit_id': edit_id
+        })
 
     def post(self, request):
-        form = TimetableSourceForm(request.POST, request.FILES)
-        if form.is_valid():
-            timetable_source = form.save(commit=False)
-            timetable_source.uploader = request.user
-            timetable_source.save()
-
-            # Parse and store events immediately after upload
+        # Handle edit form submission
+        if 'edit_id' in request.POST:
+            edit_id = request.POST.get('edit_id')
             try:
-                if parse_and_store_master_timetable(timetable_source):
-                    messages.success(
-                        request, f"'{timetable_source.display_name}' has been uploaded and processed successfully. {timetable_source.total_events} events stored.")
-                else:
-                    messages.warning(
-                        request, f"'{timetable_source.display_name}' was uploaded but failed to process. Please check the JSON format.")
-            except Exception as e:
-                messages.error(
-                    request, f"'{timetable_source.display_name}' was uploaded but processing failed: {str(e)}")
+                timetable_source = TimetableSource.objects.get(id=edit_id)
+                edit_form = TimetableSourceForm(
+                    request.POST, request.FILES, instance=timetable_source)
 
-            return redirect('admin_dashboard')
+                if edit_form.is_valid():
+                    # Check if JSON file was updated
+                    json_updated = 'source_json' in request.FILES
+
+                    edit_form.save()
+
+                    # If JSON file was updated, reparse events
+                    if json_updated:
+                        # Delete existing events
+                        TimetableEvent.objects.filter(
+                            source=timetable_source).delete()
+                        timetable_source.events_parsed = False
+                        timetable_source.total_events = 0
+                        timetable_source.status = TimetableSource.PROCESSING
+                        timetable_source.save()
+
+                        # Parse new events
+                        try:
+                            if parse_and_store_master_timetable(timetable_source):
+                                messages.success(
+                                    request, f"'{timetable_source.display_name}' has been updated and reprocessed successfully. {timetable_source.total_events} events stored.")
+                            else:
+                                messages.warning(
+                                    request, f"'{timetable_source.display_name}' was updated but failed to process. Please check the JSON format.")
+                        except Exception as e:
+                            messages.error(
+                                request, f"'{timetable_source.display_name}' was updated but processing failed: {str(e)}")
+                    else:
+                        messages.success(
+                            request, f"'{timetable_source.display_name}' has been updated successfully.")
+
+                    return redirect('admin_dashboard')
+                else:
+                    # Return to edit mode with errors
+                    form = TimetableSourceForm()
+                    timetables = TimetableSource.objects.all().order_by('-created_at')
+                    return render(request, 'core/admin_dashboard.html', {
+                        'form': form,
+                        'timetables': timetables,
+                        'edit_form': edit_form,
+                        'edit_id': edit_id
+                    })
+            except TimetableSource.DoesNotExist:
+                messages.error(request, 'Timetable not found.')
+                return redirect('admin_dashboard')
+
+        # Handle new upload form submission
+        else:
+            form = TimetableSourceForm(request.POST, request.FILES)
+            if form.is_valid():
+                timetable_source = form.save(commit=False)
+                timetable_source.uploader = request.user
+                timetable_source.save()
+
+                # Parse and store events immediately after upload
+                try:
+                    if parse_and_store_master_timetable(timetable_source):
+                        messages.success(
+                            request, f"'{timetable_source.display_name}' has been uploaded and processed successfully. {timetable_source.total_events} events stored.")
+                    else:
+                        messages.warning(
+                            request, f"'{timetable_source.display_name}' was uploaded but failed to process. Please check the JSON format.")
+                except Exception as e:
+                    messages.error(
+                        request, f"'{timetable_source.display_name}' was uploaded but processing failed: {str(e)}")
+
+                return redirect('admin_dashboard')
 
         timetables = TimetableSource.objects.all().order_by('-created_at')
         return render(request, 'core/admin_dashboard.html', {'form': form, 'timetables': timetables})
@@ -489,7 +560,7 @@ class StudentDashboardView(LoginRequiredMixin, View):
         # Check if master schedule data is available
         if not master_schedule:
             messages.error(
-                request, 'The selected timetable source is not available or the file is missing. Please contact the administrator or try a different timetable source.')
+                request, 'The selected timetable source is not available or the file is missing. Please <a href="mailto:abdulnasirmhafiz567@gmail.com" class="text-blue-400 hover:text-blue-300 underline">contact the administrator</a> or try a different timetable source.', extra_tags='safe')
             return render(request, 'core/student_dashboard.html', {'sources': sources})
 
         # Filter matching events

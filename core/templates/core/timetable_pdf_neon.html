@@ -361,8 +361,7 @@
                                 {% if event.start_time.hour == 18 %}
                                 <div class="event-card">
                                     <div class="course-code glow">{{ event.course_code }}</div>
-                                    <div class="time">{{ event.start_time.hour }}:{{ event.start_time.minute|stringformat:"02d" }}-{{
-                                        event.end_time.hour }}:{{ event.end_time.minute|stringformat:"02d" }}</div>
+{{ event.start_time|time:"g:i A" }}-{{ event.end_time|time:"g:i A" }}</div>
                                     <div class="details">⚡ {{ event.location }}</div>
                                     <div class="details">🎯 {{ event.lecturer }}</div>
                                 </div>
@@ -375,8 +374,7 @@
                                 {% if event.start_time.hour == 19 %}
                                 <div class="event-card">
                                     <div class="course-code glow">{{ event.course_code }}</div>
-                                    <div class="time">{{ event.start_time.hour }}:{{ event.start_time.minute|stringformat:"02d" }}-{{
-                                        event.end_time.hour }}:{{ event.end_time.minute|stringformat:"02d" }}</div>
+                                    <div class="time">{{ event.start_time|time:"g:i A" }}-{{ event.end_time|time:"g:i A" }}</div>
                             <div class="details">⚡ {{ event.location }}</div>
                             <div class="details">🎯 {{ event.lecturer }}</div>
                         </div>

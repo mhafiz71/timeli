@@ -61,11 +61,12 @@ class TimetableSourceForm(forms.ModelForm):
     class Meta:
         model = TimetableSource
         fields = ['academic_year', 'semester',
-                  'display_name', 'description', 'source_json']
+                  'display_name', 'timetable_type', 'description', 'source_json']
         widgets = {
             'academic_year': forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'}),
             'semester': forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'}),
             'display_name': forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'}),
+            'timetable_type': forms.Select(attrs={'class': 'input-modern block w-full px-4 py-3 rounded-md'}),
             'description': forms.Textarea(attrs={
                 'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm',
                 'rows': 3,
