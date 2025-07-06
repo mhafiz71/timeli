@@ -1,4 +1,4 @@
-# PostgreSQL Deployment Guide for Chronopars Timetable System
+# PostgreSQL Deployment Guide for Timeli Timetable System
 
 ## Overview
 This guide explains how to deploy the Django timetable system to Render with PostgreSQL database for persistent data storage, solving the data synchronization issue between development and production.
@@ -19,7 +19,7 @@ This guide explains how to deploy the Django timetable system to Render with Pos
 1. **Create PostgreSQL Database:**
    - Go to Render Dashboard
    - Click "New" → "PostgreSQL"
-   - Name: `chronopars-db`
+   - Name: `timeli-db`
    - Plan: Free
    - Region: Oregon (or your preferred region)
    - Click "Create Database"
@@ -49,17 +49,17 @@ This guide explains how to deploy the Django timetable system to Render with Pos
    - Click "New" → "Web Service"
    - Connect your GitHub repository
    - Configure:
-     - Name: `chronopars-web`
+     - Name: `timeli-web`
      - Environment: Python 3
      - Build Command: 
        ```bash
        pip install -r requirements.txt && python manage.py migrate && python manage.py seed_data && python manage.py collectstatic --noinput
        ```
-     - Start Command: `gunicorn chronopars.wsgi:application`
+     - Start Command: `gunicorn timeli.wsgi:application`
 
 2. **Set Environment Variables:**
    - `DATABASE_URL`: Paste the PostgreSQL External Database URL
-   - `DJANGO_SETTINGS_MODULE`: `chronopars.settings`
+   - `DJANGO_SETTINGS_MODULE`: `timeli.settings`
 
 ## Step 3: Verify Deployment
 
@@ -117,7 +117,7 @@ psycopg2-binary==2.9.7  # PostgreSQL adapter
 dj-database-url==2.1.0  # Database URL parsing
 ```
 
-### 2. Updated chronopars/settings.py
+### 2. Updated timeli/settings.py
 ```python
 # Automatic database switching
 if os.environ.get('DATABASE_URL'):

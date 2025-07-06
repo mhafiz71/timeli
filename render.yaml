@@ -1,18 +1,18 @@
 services:
   - type: pserv
-    name: chronopars-db
+    name: timeli-db
     plan: free
 
   - type: web
-    name: chrono-parse
+    name: timeli-web
     env: python
     runtime: python-3.11.9
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt && python manage.py migrate && python manage.py seed_data && python manage.py collectstatic --noinput
-    startCommand: gunicorn chronopars.wsgi:application
+    startCommand: gunicorn timeli.wsgi:application
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: chronopars-db
+          name: timeli-db
           property: connectionString
       - key: DJANGO_SETTINGS_MODULE
-        value: chronopars.settings
+        value: timeli.settings

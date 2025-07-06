@@ -4,12 +4,31 @@
             <!-- Logo/Brand -->
             <div class="flex-shrink-0">
                 <a href="{% url 'home' %}" class="text-xl font-semibold text-white hover:text-blue-400 transition-colors duration-300 flex items-center">
-                    <div class="w-8 h-8 bg-blue-500 rounded-lg mr-3 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2L3 7v11a1 1 0 001 1h3v-6h6v6h3a1 1 0 001-1V7l-7-5z"/>
+                    <div
+                        class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg mr-3 flex items-center justify-center shadow-lg">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <!-- Calendar with clock overlay representing timetable -->
+                            <!-- Calendar base -->
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-width="1.5" />
+                            <line x1="16" y1="2" x2="16" y2="6" stroke-width="1.5" />
+                            <line x1="8" y1="2" x2="8" y2="6" stroke-width="1.5" />
+                            <line x1="3" y1="10" x2="21" y2="10" stroke-width="1.5" />
+                    
+                            <!-- Grid dots for schedule -->
+                            <circle cx="8" cy="14" r="0.5" fill="currentColor" />
+                            <circle cx="12" cy="14" r="0.5" fill="currentColor" />
+                            <circle cx="16" cy="14" r="0.5" fill="currentColor" />
+                            <circle cx="8" cy="18" r="0.5" fill="currentColor" />
+                            <circle cx="12" cy="18" r="0.5" fill="currentColor" />
+                    
+                            <!-- Clock hands overlay -->
+                            <circle cx="16" cy="18" r="2" stroke-width="1" />
+                            <line x1="16" y1="18" x2="16" y2="16.5" stroke-width="1" />
+                            <line x1="16" y1="18" x2="17" y2="18.5" stroke-width="0.8" />
                         </svg>
                     </div>
-                    ChronoParse
+                    Timeli
                 </a>
             </div>
 

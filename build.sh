@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Build script for Render deployment
+# Build script for Timeli deployment
 
 set -o errexit  # exit on error
 
