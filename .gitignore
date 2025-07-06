@@ -16,3 +16,22 @@ test_template_features.py
 DEPLOYMENT.md
 TIMETABLE_IMPROVEMENTS.md
 second_semester.json
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Database
+db.sqlite3
+*.db
+
+# Static files (collected)
+staticfiles/

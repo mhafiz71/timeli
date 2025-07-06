@@ -16,3 +16,7 @@ services:
           property: connectionString
       - key: DJANGO_SETTINGS_MODULE
         value: timeli.settings
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
