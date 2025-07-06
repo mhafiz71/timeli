@@ -31,7 +31,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 
 ALLOWED_HOSTS = [
-    'timeli-web.onrender.com',
+    'timeli.onrender.com',
     '127.0.0.1',
     'localhost'
 ]
