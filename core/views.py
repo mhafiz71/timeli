@@ -726,35 +726,9 @@ class StudentDashboardView(LoginRequiredMixin, View):
                 level=level or None
             )
 
-            # Display detailed upload information
-            file_size = course_reg_pdf.size
-            file_size_mb = round(file_size / (1024 * 1024), 2)
-            total_events = len(student_events)
-            total_courses = len(student_course_codes)
 
-            # Count events per day
-            events_per_day = {}
-            for day in days_of_week:
-                day_events = len(schedule.get(day, []))
-                if day_events > 0:
-                    events_per_day[day] = day_events
 
-            day_summary = ", ".join(
-                [f"{day}: {count}" for day, count in events_per_day.items()])
 
-            messages.success(
-                request,
-                f"🎉 Course Registration Processed Successfully!\n"
-                f"📄 File: {course_reg_pdf.name}\n"
-                f"📊 File Size: {file_size_mb} MB\n"
-                f"🎯 Timetable Source: {source.display_name}\n"
-                f"📚 Courses Found: {total_courses} ({', '.join(sorted(student_course_codes))})\n"
-                f"📅 Events Generated: {total_events}\n"
-                f"📋 Schedule: {day_summary if day_summary else 'No events scheduled'}\n"
-                f"👤 Program: {program or 'Not specified'}\n"
-                f"🎓 Level: {level or 'Not specified'}\n"
-                f"⏰ Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-            )
 
         except Exception as e:
             print(f"Error saving history: {e}")
@@ -818,33 +792,9 @@ def reuse_course_registration(request, history_id):
         history_list = CourseRegistrationHistory.objects.filter(
             user=request.user).order_by('-last_used')[:5]
 
-        # Display detailed reuse information
-        total_events = len(student_events)
-        total_courses = len(course_codes)
 
-        # Count events per day
-        events_per_day = {}
-        for day in days_of_week:
-            day_events = len(schedule.get(day, []))
-            if day_events > 0:
-                events_per_day[day] = day_events
 
-        day_summary = ", ".join(
-            [f"{day}: {count}" for day, count in events_per_day.items()])
 
-        messages.success(
-            request,
-            f"♻️ Course Registration Reused Successfully!\n"
-            f"📋 Registration: {history.display_name}\n"
-            f"🎯 Timetable Source: {history.source.display_name}\n"
-            f"📚 Courses: {total_courses} ({', '.join(sorted(course_codes))})\n"
-            f"📅 Events Generated: {total_events}\n"
-            f"📋 Schedule: {day_summary if day_summary else 'No events scheduled'}\n"
-            f"👤 Program: {history.program or 'Not specified'}\n"
-            f"🎓 Level: {history.level or 'Not specified'}\n"
-            f"📅 Originally Created: {history.created_at.strftime('%Y-%m-%d %H:%M:%S')}\n"
-            f"⏰ Reused: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        )
 
         return render(request, 'core/student_dashboard.html', {
             'sources': sources,
@@ -928,7 +878,7 @@ def download_timetable_jpg(request):
     """Generate and download timetable as JPG image"""
     source_id = request.GET.get('source_id')
     course_codes_str = request.GET.get('codes', '')
-    template_type = request.GET.get('template', 'modern')
+
     course_codes = [normalize_course_code(
         code) for code in course_codes_str.split(',') if code.strip()]
 
@@ -953,10 +903,18 @@ def download_timetable_jpg(request):
     except TimetableSource.DoesNotExist:
         return HttpResponse("Timetable source not found.", status=404)
 
-    # Create image using PIL - Minimal-inspired design
+    # Create image using PIL - Different layouts for exam vs teaching
     img_width, img_height = 1400, 900
-    # Light background like minimal
-    img = Image.new('RGB', (img_width, img_height), color='#fafafa')
+
+    # Different background colors based on type
+    if source.timetable_type == 'exam':
+        bg_color = '#fef3f2'  # Light red background for exams
+        header_color = '#dc2626'  # Red header for exams
+    else:  # teaching or other types
+        bg_color = '#fafafa'  # Light background for teaching
+        header_color = '#1e293b'  # Dark header for teaching
+
+    img = Image.new('RGB', (img_width, img_height), color=bg_color)
     draw = ImageDraw.Draw(img)
 
     try:
@@ -974,19 +932,32 @@ def download_timetable_jpg(request):
         text_font = ImageFont.load_default()
         small_font = ImageFont.load_default()
 
-    # Draw header section with minimal-inspired styling
+    # Draw header section with type-specific styling
     header_height = 80
 
-    # Draw header background
+    # Draw header background with type-specific color
     draw.rectangle([0, 0, img_width, header_height],
-                   fill='white', outline='#ddd')
+                   fill=header_color, outline=header_color)
 
-    # Draw title
-    title = "My Timetable"
-    title_bbox = draw.textbbox((0, 0), title, font=title_font)
+    # Draw title with type indicator
+    if source.timetable_type == 'exam':
+        type_indicator = "📝 EXAM SCHEDULE"
+        subtitle = f"{source.display_name}"
+    else:  # teaching or other types
+        type_indicator = "📚 CLASS SCHEDULE"
+        subtitle = f"{source.display_name}"
+
+    # Main title
+    title_bbox = draw.textbbox((0, 0), type_indicator, font=title_font)
     title_width = title_bbox[2] - title_bbox[0]
-    draw.text(((img_width - title_width) // 2, 15),
-              title, fill='#333', font=title_font)
+    draw.text(((img_width - title_width) // 2, 10),
+              type_indicator, fill='white', font=title_font)
+
+    # Subtitle
+    subtitle_bbox = draw.textbbox((0, 0), subtitle, font=subtitle_font)
+    subtitle_width = subtitle_bbox[2] - subtitle_bbox[0]
+    draw.text(((img_width - subtitle_width) // 2, 45),
+              subtitle, fill='white', font=subtitle_font)
 
     # Draw subtitle
     subtitle = f"{source.display_name} - Generated by Timeli AI"
@@ -1077,52 +1048,76 @@ def download_timetable_jpg(request):
                 if card_y + card_height > y + cell_height - 10:
                     break
 
-                # Event card background with blue styling
+                # Event card background with type-specific styling
+                if source.timetable_type == 'exam':
+                    # Red styling for exam cards
+                    card_bg = '#fee2e2'  # Light red background
+                    card_border = '#dc2626'  # Red border
+                    text_color = '#7f1d1d'  # Dark red text
+                    time_color = '#991b1b'  # Red time text
+                else:
+                    # Blue styling for teaching cards
+                    card_bg = '#dbeafe'  # Light blue background
+                    card_border = '#2563eb'  # Blue border
+                    text_color = '#1e293b'  # Dark text
+                    time_color = '#334155'  # Gray time text
+
                 draw.rectangle([card_x, card_y, card_x + card_width, card_y + card_height],
-                               outline='#2563eb', fill='#dbeafe', width=2)
+                               outline=card_border, fill=card_bg, width=2)
 
                 # Course code (prominent and bold)
                 course_text = event.course_code
                 if len(course_text) > 12:  # Adjusted for larger font
                     course_text = course_text[:12] + "..."
                 draw.text((card_x + 12, card_y + 10),
-                          course_text, fill='#1e293b', font=text_font)
+                          course_text, fill=text_color, font=text_font)
 
                 # Time (larger and clearer)
                 time_text = f"{event.start_time.hour}:{event.start_time.minute:02d} - {event.end_time.hour}:{event.end_time.minute:02d}"
                 draw.text((card_x + 12, card_y + 35),
-                          time_text, fill='#334155', font=small_font)
+                          time_text, fill=time_color, font=small_font)
 
-                # Date for exam schedules (moved up and made more prominent)
+                # Different content based on timetable type
                 y_offset = 60
-                if source.timetable_type == 'exam' and hasattr(event, 'details') and event.details:
-                    # Extract date from details field (format: "Level: {level}, Date: {date}")
-                    if "Date: " in event.details:
-                        date_part = event.details.split(
-                            "Date: ")[1] if "Date: " in event.details else ""
-                        if date_part:
-                            date_text = date_part[:15] + \
-                                "..." if len(date_part) > 15 else date_part
-                            draw.text((card_x + 12, card_y + 60),
-                                      f"📅 {date_text}", fill='#dc2626', font=small_font)
-                            y_offset = 85
 
+                if source.timetable_type == 'exam':
+                    # EXAM TIMETABLE: Show ONLY date and level (NO venue)
+                    if hasattr(event, 'details') and event.details:
+                        # Extract date from details field (format: "Level: {level}, Date: {date}")
+                        if "Date: " in event.details:
+                            date_part = event.details.split(
+                                "Date: ")[1] if "Date: " in event.details else ""
+                            if date_part:
+                                date_text = date_part[:15] + \
+                                    "..." if len(date_part) > 15 else date_part
+                                draw.text((card_x + 12, card_y + 60),
+                                          f"📅 {date_text}", fill='#dc2626', font=small_font)
+                                y_offset = 85
 
+                        # Extract level from details
+                        if "Level: " in event.details:
+                            level_part = event.details.split("Level: ")[1].split(
+                                ",")[0] if "Level: " in event.details else ""
+                            if level_part:
+                                draw.text((card_x + 12, y_offset),
+                                          f"🎓 {level_part}", fill='#991b1b', font=small_font)
 
-                # Location (truncated, larger text)
-                if event.location:
-                    location_text = event.location[:18] + \
-                        "..." if len(event.location) > 18 else event.location
-                    draw.text((card_x + 12, y_offset),
-                              f"📍 {location_text}", fill='#475569', font=small_font)
-                    y_offset += 25
+                else:
+                    # TEACHING TIMETABLE: Show ONLY venue and lecturer (NO dates)
+                    # Location/Venue (truncated, larger text)
+                    if event.location:
+                        location_text = event.location[:18] + "..." if len(
+                            event.location) > 18 else event.location
+                        draw.text((card_x + 12, y_offset),
+                                  f"📍 {location_text}", fill='#475569', font=small_font)
+                        y_offset += 20
 
-                # Lecturer (truncated, larger text)
-                if event.lecturer:
-                    lecturer_text = event.lecturer[:16] + \
-                        "..." if len(event.lecturer) > 16 else event.lecturer
-                    draw.text((card_x + 12, y_offset),
-                              f"👨‍🏫 {lecturer_text}", fill='#475569', font=small_font)
+                    # Lecturer (truncated, larger text)
+                    if event.lecturer:
+                        lecturer_text = event.lecturer[:16] + "..." if len(
+                            event.lecturer) > 16 else event.lecturer
+                        draw.text((card_x + 12, y_offset),
+                                  f"👨‍🏫 {lecturer_text}", fill='#475569', font=small_font)
         else:
             # Empty state - no classes for this day
             no_classes_text = "No classes scheduled"
@@ -1152,6 +1147,12 @@ def download_timetable_jpg(request):
     img.save(img_buffer, format='JPEG', quality=95)
     img_buffer.seek(0)
 
+    # Generate filename based on timetable type
+    if source.timetable_type == 'exam':
+        filename = "my_exam_schedule.jpg"
+    else:
+        filename = "my_class_schedule.jpg"
+
     response = HttpResponse(img_buffer.getvalue(), content_type='image/jpeg')
-    response['Content-Disposition'] = 'attachment; filename="my_timetable_minimal.jpg"'
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
     return response
