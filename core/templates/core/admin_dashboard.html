@@ -149,12 +149,7 @@
                         <div>
                             <label for="{{ form.timetable_type.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">Timetable
                                 Type</label>
-                            <select name="{{ form.timetable_type.name }}" id="{{ form.timetable_type.id_for_label }}"
-                                class="input-modern block w-full px-4 py-3 rounded-md">
-                                {% for value, label in form.timetable_type.field.choices %}
-                                <option value="{{ value }}" {% if form.timetable_type.value==value %}selected{% endif %}>{{ label }}</option>
-                                {% endfor %}
-                            </select>
+                            {{ form.timetable_type }}
                             </div>
                             <div>
                             <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">Description
