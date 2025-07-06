@@ -57,6 +57,13 @@
                             <input type="text" name="{{ form.display_name.name }}" id="{{ form.display_name.id_for_label }}" class="input-modern block w-full px-4 py-3 rounded-md" placeholder="e.g., Fall 2024 Timetable">
                         </div>
                         <div>
+                            <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">Description
+                                (Optional)</label>
+                            <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="3"
+                                class="input-modern block w-full px-4 py-3 rounded-md resize-none"
+                                placeholder="Optional: Add description for this timetable (e.g., Computer Science Department, First Year Students, etc.)"></textarea>
+                            </div>
+                            <div>
                             <label for="{{ form.source_json.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">Timetable JSON File</label>
                             <div class="relative">
                                 <input type="file" name="{{ form.source_json.name }}" accept=".json" required id="{{ form.source_json.id_for_label }}" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
@@ -110,6 +117,9 @@
                             <div class="flex justify-between items-center">
                                 <div class="flex-1">
                                     <h3 class="font-semibold text-white mb-1">{{ tt.display_name }}</h3>
+                                    {% if tt.description %}
+                                    <p class="text-gray-300 text-sm mb-2">{{ tt.description }}</p>
+                                    {% endif %}
                                     <div class="flex items-center text-gray-400 text-sm space-x-4">
                                         <div class="flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

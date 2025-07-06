@@ -1,7 +1,7 @@
 # core/urls.py
 from django.urls import path
 from django.shortcuts import redirect
-from .views import AdminDashboardView, StudentDashboardView, SignupView, UserProfileView, download_timetable_pdf, download_timetable_jpg, delete_timetable_source, reuse_course_registration
+from .views import AdminDashboardView, StudentDashboardView, SignupView, UserProfileView, download_timetable_pdf, download_timetable_jpg, delete_timetable_source, reuse_course_registration, PublicTimetablesView
 
 
 def home_redirect(request):
@@ -18,6 +18,8 @@ urlpatterns = [
     path('dashboard/admin', AdminDashboardView.as_view(), name='admin_dashboard'),
     path('student-dashboard/', StudentDashboardView.as_view(),
          name='student_dashboard'),
+    # --- ADDED: Public timetables view ---
+    path('timetables/', PublicTimetablesView.as_view(), name='public_timetables'),
     # --- ADDED: URL for the download feature ---
     path('download-timetable/', download_timetable_pdf,
          name='download_timetable_pdf'),

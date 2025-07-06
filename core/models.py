@@ -34,9 +34,35 @@ class TimetableSource(models.Model):
         (FAILED, 'Failed'),
     ]
 
+    # Timetable type choices
+    TEACHING = 'teaching'
+    EXAM = 'exam'
+    PERSONAL = 'personal'
+    EVENT = 'event'
+    OTHER = 'other'
+
+    TYPE_CHOICES = [
+        (TEACHING, 'Teaching Schedule'),
+        (EXAM, 'Exam Schedule'),
+        (PERSONAL, 'Personal Schedule'),
+        (EVENT, 'Event Schedule'),
+        (OTHER, 'Other'),
+    ]
+
     academic_year = models.CharField(max_length=10)
     semester = models.CharField(max_length=20)
     display_name = models.CharField(max_length=255)
+    timetable_type = models.CharField(
+        max_length=20,
+        choices=TYPE_CHOICES,
+        default=TEACHING,
+        help_text="Type of timetable (teaching, exam, personal, etc.)"
+    )
+    description = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Optional description for this timetable (e.g., department, program, or special notes)"
+    )
     # --- RENAMED: from source_pdf to source_json ---
     source_json = models.FileField(upload_to='master_timetables/')
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)

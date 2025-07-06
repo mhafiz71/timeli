@@ -1,0 +1,155 @@
+{% extends "theme/base.html" %}
+{% block title %}Available Timetables{% endblock %}
+
+{% block content %}
+<div class="min-h-screen">
+    <!-- Header Section -->
+    <div class="border-b border-white/10 bg-black/20 backdrop-blur-sm">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                <div class="mb-6 lg:mb-0">
+                    <h1 class="text-3xl font-semibold text-white mb-2">
+                        Available Timetables
+                    </h1>
+                    <p class="text-gray-400">
+                        Browse all available master timetables in the system
+                    </p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="inline-flex items-center px-3 py-1 rounded-lg bg-blue-500/20 text-blue-300 text-sm font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        View Only
+                    </div>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'student_dashboard' %}" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+                        Go to Dashboard
+                    </a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+                        Login to Generate Timetable
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 py-8">
+        {% if timetables %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for tt in timetables %}
+            <div class="glass-card p-6 rounded-lg border border-white/10 hover:border-white/20 transition-all duration-300 card-hover fade-in">
+                <!-- Timetable Header -->
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-white mb-2">{{ tt.display_name }}</h3>
+                        {% if tt.description %}
+                        <p class="text-gray-300 text-sm mb-3 leading-relaxed">{{ tt.description }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="ml-4">
+                        <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timetable Details -->
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center text-gray-400 text-sm">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="font-medium">Academic Year:</span>
+                        <span class="ml-2 text-white">{{ tt.academic_year }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-400 text-sm">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="font-medium">Semester:</span>
+                        <span class="ml-2 text-white">{{ tt.semester }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-400 text-sm">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                        <span class="font-medium">Total Events:</span>
+                        <span class="ml-2 text-white">{{ tt.total_events }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-400 text-sm">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="font-medium">Created:</span>
+                        <span class="ml-2 text-white">{{ tt.created_at|date:"M d, Y" }}</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="border-t border-white/10 pt-4">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'student_dashboard' %}?source={{ tt.id }}" 
+                       class="btn-primary w-full py-2 rounded-lg text-sm font-medium text-center block">
+                        Use This Timetable
+                    </a>
+                    {% else %}
+                    <a href="{% url 'login' %}?next={% url 'student_dashboard' %}%3Fsource%3D{{ tt.id }}" 
+                       class="btn-secondary w-full py-2 rounded-lg text-sm font-medium text-center block">
+                        Login to Use This Timetable
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination or Load More (if needed in future) -->
+        {% if timetables|length > 12 %}
+        <div class="text-center mt-8">
+            <p class="text-gray-400 text-sm">Showing {{ timetables|length }} timetables</p>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-16">
+            <div class="w-20 h-20 bg-gray-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2">No Timetables Available</h3>
+            <p class="text-gray-400 mb-6">There are currently no master timetables uploaded to the system.</p>
+            {% if user.is_staff %}
+            <a href="{% url 'admin_dashboard' %}" class="btn-primary px-6 py-3 rounded-lg font-medium">
+                Upload First Timetable
+            </a>
+            {% else %}
+            <p class="text-gray-500 text-sm">Please contact an administrator to upload timetables.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Info Banner -->
+<div class="border-t border-white/10 bg-black/20 backdrop-blur-sm">
+    <div class="container mx-auto px-6 py-6">
+        <div class="flex items-center justify-center">
+            <div class="flex items-center text-gray-400 text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                This is a read-only view. To generate your personal timetable, please log in and go to your dashboard.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

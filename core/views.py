@@ -646,6 +646,20 @@ def download_timetable_pdf(request):
     return HttpResponse("Error Generating PDF", status=500)
 
 
+class PublicTimetablesView(View):
+    """Public view for browsing available timetables without modification privileges"""
+
+    def get(self, request):
+        # Get all completed timetables ordered by creation date
+        timetables = TimetableSource.objects.filter(
+            status=TimetableSource.COMPLETED
+        ).order_by('-created_at')
+
+        return render(request, 'core/public_timetables.html', {
+            'timetables': timetables
+        })
+
+
 @login_required
 def download_timetable_jpg(request):
     """Generate and download timetable as JPG image"""
