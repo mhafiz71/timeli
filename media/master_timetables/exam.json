@@ -1,0 +1,1676 @@
+{
+  "university": "C. K. TEDAM UNIVERSITY OF TECHNOLOGY AND APPLIED SCIENCES",
+  "session": "2024/2025 Second Semester",
+  "type": "PROVISIONAL Examination Timetable",
+  "schedule": [
+    {
+      "week": "WEEK ONE",
+      "days": [
+        {
+          "day": "MONDAY",
+          "date": "28/07/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 202",
+                    "ENV 308",
+                    "PMP 344",
+                    "ETS 312",
+                    "PHT 104",
+                    "CHM 322",
+                    "CSC 102",
+                    "CDS 302",
+                    "MTH 314",
+                    "CHE 332",
+                    "BIE 402",
+                    "BCH 202",
+                    "PHY 404",
+                    "CAC 402",
+                    "BCH 408",
+                    "MTH 302",
+                    "CSC 418",
+                    "CSC 306",
+                    "EPB 306",
+                    "FSC 306",
+                    "ICS 408",
+                    "MAE 302",
+                    "MLS 106",
+                    "NURT 310",
+                    "PHE 204"
+                  ],
+                  "examiners": [
+                    "Sarpong SK",
+                    "Ampadu B",
+                    "Abubakari MN",
+                    "Bayari EE",
+                    "Bayuo J",
+                    "Bakaweri EB",
+                    "Gyamera S",
+                    "Azaare J",
+                    "Mohammed ID",
+                    "Adjabui MJ",
+                    "Dorash P",
+                    "Wilmot D",
+                    "Sunyazi SS",
+                    "Berdie BS",
+                    "Mensah V",
+                    "Anyigba CA",
+                    "Nutakor C",
+                    "Agana F",
+                    "Nakpih CI",
+                    "Aburinya BB",
+                    "Krakani P",
+                    "Seidu RA",
+                    "Wumnaya PA",
+                    "Boahene E",
+                    "Diogbann J",
+                    "Kuugbee ED",
+                    "Tindan TN"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DIT 104",
+                    "DCI 202"
+                  ],
+                  "examiners": [
+                    "Olaewe OO",
+                    "Wumnaya PA"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "PEC 604",
+                    "MCB 602",
+                    "STS 612"
+                  ],
+                  "examiners": [
+                    "Nasiru S",
+                    "Dioggban J"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 302",
+                    "BIO 416",
+                    "ENV 424",
+                    "PHY 202",
+                    "ETS 204",
+                    "ENV 204",
+                    "PHT 232",
+                    "CHM 422",
+                    "CSC 202",
+                    "MTH 472",
+                    "STS 472",
+                    "ACT 202",
+                    "EPB 102",
+                    "MAE 408",
+                    "PHY 310",
+                    "ESD 102",
+                    "ACT 304",
+                    "BIO 102",
+                    "BIE 102",
+                    "PFR 202",
+                    "CDS 404",
+                    "NURS 108",
+                    "PHT 306",
+                    "PNUR 308"
+                  ],
+                  "examiners": [
+                    "Azameti MK",
+                    "Amadu CC",
+                    "Ampadu B",
+                    "Balfour EA",
+                    "Pedavoah MM",
+                    "Apea OB",
+                    "Aveyom V",
+                    "Oladejo NK",
+                    "Angbing ID",
+                    "Osei-Mainoo A",
+                    "Atepor S",
+                    "Bayor JS",
+                    "Ampofo S",
+                    "Anang RC",
+                    "Captain-Esoah M",
+                    "Ayeriga MW",
+                    "Akazili J",
+                    "Owusu S",
+                    "Gati ES",
+                    "Ziemah J",
+                    "Doat AR",
+                    "Kwose W"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DCS 202",
+                    "DCI 102"
+                  ],
+                  "examiners": [
+                    "Aveyom V",
+                    "Bakaweri EB"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "ENV 602",
+                    "BCH 606",
+                    "MTH 614",
+                    "CSC 602",
+                    "EPB 602"
+                  ],
+                  "examiners": [
+                    "Adonadaga MG",
+                    "Welaga P",
+                    "Seidu B",
+                    "Agebure MA"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "day": "TUESDAY",
+          "date": "29/07/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "GEN 102",
+                    "BIO 204",
+                    "PHY 312",
+                    "PMP 346",
+                    "ETS 304",
+                    "BCH 306",
+                    "CDS 304",
+                    "CAC 302",
+                    "STS 342",
+                    "CHM 402",
+                    "ACT 402",
+                    "MTH 442",
+                    "SCE 202",
+                    "PFR 302",
+                    "ESD 308",
+                    "FSC 304",
+                    "PMP 402"
+                  ],
+                  "examiners": [
+                    "Essel E",
+                    "Yaro DS",
+                    "Zieka MP",
+                    "Gyasi DA",
+                    "Abubakari MN",
+                    "Bayari EE",
+                    "Agongo G",
+                    "Baagyere EY",
+                    "Anafo SA",
+                    "Dioggban J",
+                    "Mbatchou VC",
+                    "Osei-Mainoo A",
+                    "Nantomah K",
+                    "Salifu RA",
+                    "Anemana T",
+                    "Anyigba CA",
+                    "Issahaku AS"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "GEN 106"
+                  ],
+                  "examiners": [
+                    "Zieka MP"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "PEC 616",
+                    "STS 634",
+                    "ICT 602"
+                  ],
+                  "examiners": [
+                    "Abalori T",
+                    "Engmann GM",
+                    "Agbedemnab PA"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 320",
+                    "BIO 404",
+                    "STS 204",
+                    "ETS 206",
+                    "ETS 414",
+                    "PHT 206",
+                    "CDS 204",
+                    "ICS 302",
+                    "MTH 486",
+                    "STS 442",
+                    "BIE 202",
+                    "MAE 202",
+                    "FCE 302",
+                    "CHE 406",
+                    "CHM 324",
+                    "ACT 306",
+                    "CSC 364",
+                    "MTH 324",
+                    "CSC 416",
+                    "NURT 304",
+                    "PHT 322",
+                    "PNUR 320"
+                  ],
+                  "examiners": [
+                    "Atujona D",
+                    "Azameti MK",
+                    "Zamanah E",
+                    "Akamba M",
+                    "Mohammed AR",
+                    "Fosu-Amankwah K",
+                    "Gyamera S",
+                    "Wilmot D",
+                    "Abukari MA",
+                    "Dang-I-YA",
+                    "Agbedemnab PA",
+                    "Bonye F",
+                    "Sie CK",
+                    "Anang RC",
+                    "Agebure MA",
+                    "Akobre S",
+                    "Ziemah J",
+                    "Doat AR"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DLT 214",
+                    "DIT 202",
+                    "DCI 212",
+                    "DME 208"
+                  ],
+                  "examiners": [
+                    "Oluyinka OA",
+                    "Olaewe OO",
+                    "Adams FX",
+                    "Adom DK"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "PHY 606",
+                    "MTH 612",
+                    "CHM 582",
+                    "AEP 612",
+                    "MCB 636"
+                  ],
+                  "examiners": [
+                    "Bayor JS",
+                    "Twum S",
+                    "Bayuo J",
+                    "Captain-Esoah M",
+                    "Kuugbee ED"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "day": "WEDNESDAY",
+          "date": "30/07/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 322",
+                    "CSC 104",
+                    "ETS 102",
+                    "ESD 104",
+                    "PHY 324",
+                    "ETS 306",
+                    "ENT 102",
+                    "CSC 314",
+                    "ICS 304",
+                    "CDS 306",
+                    "ACT 308",
+                    "PHT 202",
+                    "BCH 424",
+                    "ENV 422",
+                    "PHT 106",
+                    "ESD 310",
+                    "FSC 308",
+                    "ICS 402",
+                    "MLS 110",
+                    "MTH 322",
+                    "NURS 114",
+                    "NURT 318",
+                    "PHE 212"
+                  ],
+                  "examiners": [
+                    "Kombat EO",
+                    "Nakpih CI",
+                    "Armah DA",
+                    "Owusu G",
+                    "Adazabrah AN",
+                    "Agongo G",
+                    "Agebure MA",
+                    "Wumnaya PA",
+                    "Nakpih CI",
+                    "Osei-Mainoo A",
+                    "Bayuo J",
+                    "Dassah SD",
+                    "Dang-I-Y A",
+                    "Atindana S",
+                    "Anemana T",
+                    "Dassah SD",
+                    "Bakaweri EB",
+                    "Kuugbee ED",
+                    "Sandow S",
+                    "Tindan TN",
+                    "Kwose W"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DCS 106",
+                    "DMT 202"
+                  ],
+                  "examiners": [
+                    "Agebure MA",
+                    "Adjabui MJ"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "AEP 604",
+                    "MCB 604",
+                    "STS 650",
+                    "ICT 604",
+                    "CSC 609"
+                  ],
+                  "examiners": [
+                    "Captain-Esoah M",
+                    "Azameti MK",
+                    "Zamanah E",
+                    "Bankas EK",
+                    "Wumnaya PA"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 214",
+                    "BIO 432",
+                    "FCE 104",
+                    "ENV 224",
+                    "PHY 204",
+                    "ETS 208",
+                    "PHY 412",
+                    "BCH 204",
+                    "CAC 404",
+                    "MTH 478",
+                    "STS 452",
+                    "MTH 212",
+                    "EPB 202",
+                    "CHE 204",
+                    "MAE 204",
+                    "FCE 304",
+                    "FCE 402",
+                    "BCH 308",
+                    "CHM 332",
+                    "ENV 322",
+                    "CSC 204",
+                    "STS 404",
+                    "EPB 304",
+                    "MLS 202",
+                    "PHT 302",
+                    "PNUR 302",
+                    "SOE 402"
+                  ],
+                  "examiners": [
+                    "Awo O",
+                    "Adetunde LA",
+                    "Yaro DS",
+                    "Berdie BS",
+                    "Bayor JS",
+                    "Mensah PK",
+                    "Seidu RA",
+                    "Luu Y",
+                    "Bonye F",
+                    "Nantomah K",
+                    "Nasiru S",
+                    "Moro A",
+                    "Abudu F",
+                    "Asiedu LO",
+                    "Alagbela AA",
+                    "Sunnyazi SS",
+                    "Olunyinka AO",
+                    "Aburinya BB",
+                    "Obeng M",
+                    "Sie CK",
+                    "Engmann GM",
+                    "Moro A",
+                    "Anyorigiya TA",
+                    "Bayuo J",
+                    "Doat AR",
+                    "Gyamfi EO",
+                    "Ampadu B"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "FDE 104",
+                    "DLT 216",
+                    "DMT 102"
+                  ],
+                  "examiners": [
+                    "Obeng M",
+                    "Oyelude EO",
+                    "Alhassan EA"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "ENV 614",
+                    "BCH 602",
+                    "BCH 702",
+                    "MTH 624",
+                    "PFR 602",
+                    "PEC 610"
+                  ],
+                  "examiners": [
+                    "Adu-Frimpong M",
+                    "Adjabui MJ",
+                    "Salem ES",
+                    "Abalori T",
+                    "Kombat EO"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "day": "THURSDAY",
+          "date": "31/07/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 304",
+                    "ENV 404",
+                    "PHY 104",
+                    "PHY 306",
+                    "STS 106",
+                    "CHM 304",
+                    "SOE 322",
+                    "MTH 332",
+                    "PFR 106",
+                    "SCE 312",
+                    "MAE 406",
+                    "FCE 102",
+                    "BIO 418",
+                    "FSC 302",
+                    "ICS 412",
+                    "MLS 104",
+                    "NURS 104",
+                    "NURT 306",
+                    "PHE 214",
+                    "PIP 254"
+                  ],
+                  "examiners": [
+                    "Attaribo T",
+                    "Fosu-Amankwah K",
+                    "Owusu S",
+                    "Engmann GM",
+                    "Mbatchou VC",
+                    "Gyamera S",
+                    "Boah DK",
+                    "Salem ES",
+                    "Tindan TN",
+                    "Amanyi CK",
+                    "Ayeriga MN",
+                    "Gyamfi EO",
+                    "Essel E",
+                    "Seidu RA",
+                    "Wumnaya PA",
+                    "Agongo G",
+                    "Tindan TN",
+                    "Abubakari MN",
+                    "Nigarim D"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "FDE 102"
+                  ],
+                  "examiners": [
+                    "Ayeriga MW"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "MCB 638",
+                    "STS 614"
+                  ],
+                  "examiners": [
+                    "Kuugbee ED",
+                    "Angbing ID"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 436",
+                    "PHY 424",
+                    "FSC 204",
+                    "CHM 448",
+                    "PHT 142",
+                    "ICS 208",
+                    "CAC 202",
+                    "ACT 206",
+                    "PFR 208",
+                    "CHE 206",
+                    "MAE 206",
+                    "CSC 448",
+                    "ICS 104",
+                    "PHT 262",
+                    "PFR 304",
+                    "MLS 212",
+                    "PHT 334",
+                    "PMP 444",
+                    "PNUR 312",
+                    "SOE 406"
+                  ],
+                  "examiners": [
+                    "Abache G",
+                    "Azameti MK",
+                    "Balfour EA",
+                    "Anyorigiya TA",
+                    "Abagale SA",
+                    "Luu Y",
+                    "Bakaweri EB",
+                    "Seidu B",
+                    "Abonongo J",
+                    "Salem ES",
+                    "Abudu F",
+                    "Asiedu LO",
+                    "Armah GA",
+                    "Gyamfi EO",
+                    "Shaban SH",
+                    "Akazili J",
+                    "Kuugbee ED",
+                    "Ziemah J",
+                    "Issahaku AS",
+                    "Doat AR",
+                    "Akobre S"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DCS 212",
+                    "DME 206"
+                  ],
+                  "examiners": [
+                    "Gyamfi EO"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "PHY 602",
+                    "CHM 538",
+                    "CSC 606",
+                    "CSC 806",
+                    "ICT 606",
+                    "EPB 604"
+                  ],
+                  "examiners": [
+                    "Adazabra AN",
+                    "Apea OB",
+                    "Bankas EK",
+                    "Agebure MA"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "day": "FRIDAY",
+          "date": "01/08/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 314",
+                    "MAE 108",
+                    "MTH 102",
+                    "ESD 106",
+                    "ENV 310",
+                    "BCH 304",
+                    "CHM 344",
+                    "BCH 404",
+                    "PHY 320",
+                    "MTH 392",
+                    "EPB 204",
+                    "CHE 404",
+                    "MAE 404",
+                    "PHY 212",
+                    "CHM 212",
+                    "BIE 408",
+                    "ESD 302",
+                    "NURS 110",
+                    "NURT 302"
+                  ],
+                  "examiners": [
+                    "Attaribo T",
+                    "Nutakor C",
+                    "Sunyazi SS",
+                    "Ampofo S",
+                    "Bornaa CS",
+                    "Asiedu LO",
+                    "Douti BN",
+                    "Balfour EA",
+                    "Oyelude EO",
+                    "Anafo SA",
+                    "Welaga P",
+                    "Samari JA",
+                    "Armah EK",
+                    "Ayimbilla EA",
+                    "Asaah M",
+                    "Doat AR"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DLT 116",
+                    "DLT 204",
+                    "FDE 206"
+                  ],
+                  "examiners": [
+                    "Nasiru S",
+                    "Peadavoah MM",
+                    "Yaro DS"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "MCB 606",
+                    "STS 652",
+                    "STS 618"
+                  ],
+                  "examiners": [
+                    "Awo O",
+                    "Logubayom IA",
+                    "Abonongo J"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 206",
+                    "BIO 420",
+                    "ENV 214",
+                    "ENV 402",
+                    "ETS 226",
+                    "PHY 402",
+                    "BCH 206",
+                    "FSC 206",
+                    "PHT 224",
+                    "CHM 444",
+                    "MTH 206",
+                    "CDS 206",
+                    "CAC 408",
+                    "PFR 104",
+                    "FCE 202",
+                    "PHY 302",
+                    "MTH 474",
+                    "STS 384",
+                    "CDS 408",
+                    "PFR 306",
+                    "MLS 204",
+                    "PHT 304",
+                    "PMP 422",
+                    "PNUR 304"
+                  ],
+                  "examiners": [
+                    "Adetunde LA",
+                    "Angyiereyiri ED",
+                    "Ampofo S",
+                    "Asaah MS",
+                    "Berdie BS",
+                    "Bayor JS",
+                    "Anyigba CA",
+                    "Donkor MN",
+                    "Shaban SH",
+                    "Pedavoah MM",
+                    "Gyamera S",
+                    "Anafo SA",
+                    "Salem ES",
+                    "Gyasi DA",
+                    "Kulu E",
+                    "Angbing ID",
+                    "Obeng M",
+                    "Aveyom V",
+                    "Krakani P",
+                    "Ziem JB",
+                    "Abugri J",
+                    "Abubakari MN",
+                    "Doat AR"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DIT 204",
+                    "FDE 202"
+                  ],
+                  "examiners": [
+                    "Obeng M",
+                    "Agbedemnab PA"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "ENV 642",
+                    "MTH 628",
+                    "PFR 604",
+                    "CSC 818",
+                    "PEC 606",
+                    "AEP 632"
+                  ],
+                  "examiners": [
+                    "Asaah M",
+                    "Abe-I-Kpeng G",
+                    "Salem ES",
+                    "Agbedemnab PA",
+                    "Adonadaga MG",
+                    "Abalori T"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": "WEEK TWO",
+      "days": [
+        {
+          "day": "MONDAY",
+          "date": "04/08/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 422",
+                    "ENV 102",
+                    "MAE 106",
+                    "ESD 108",
+                    "ENV 324",
+                    "PHY 206",
+                    "PHY 422",
+                    "ETS 404",
+                    "CHM 202",
+                    "BCH 312",
+                    "CHM 342",
+                    "BCH 422",
+                    "MTH 106",
+                    "CDS 106",
+                    "CSC 322",
+                    "ICS 306",
+                    "MTH 372",
+                    "STS 382",
+                    "MTH 372",
+                    "PFR 206",
+                    "BIE 306",
+                    "MTH 428",
+                    "PHT 132",
+                    "CDS 406",
+                    "EPB 302",
+                    "MLS 208",
+                    "MTH 316",
+                    "PHT 312",
+                    "PNUR 314"
+                  ],
+                  "examiners": [
+                    "Angyiereyiri ED",
+                    "Owusu G",
+                    "Boahene E",
+                    "Asaah MS",
+                    "Adonadaga MG",
+                    "Fosu-Amankwah K",
+                    "Berdie BS",
+                    "Mbatchou VC",
+                    "Donkor MN",
+                    "Bayuo J",
+                    "Abugri J",
+                    "Osei B",
+                    "Gyamera S",
+                    "Adom DK",
+                    "Akamba M",
+                    "Salifu RS",
+                    "Dorsah P",
+                    "Wilmot D",
+                    "Abe-I-Kpeng G",
+                    "Dang-I-Y A",
+                    "Mohammed ID",
+                    "Aburinya BB",
+                    "Achana F",
+                    "Anyorigiya TA",
+                    "Abe-I-Kpeng G",
+                    "Dang-I YA",
+                    "Agana FA"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DME 106",
+                    "DCS 206"
+                  ],
+                  "examiners": [
+                    "Boahene E",
+                    "Aveyom V"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "PEC 614",
+                    "MCB 608",
+                    "CHM 588",
+                    "MTH 674",
+                    "ENV 602",
+                    "ICT 612"
+                  ],
+                  "examiners": [
+                    "Abalori T",
+                    "Adetunde LA",
+                    "Apea OB",
+                    "Seidu B",
+                    "Adonadaga MG",
+                    "Agbedemnab PA"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 326",
+                    "BIO 232",
+                    "ESD 202",
+                    "ETS 202",
+                    "ENV 432",
+                    "PMP 348",
+                    "ETS 316",
+                    "PHT 236",
+                    "CHM 442",
+                    "CSC 206",
+                    "ICS 212",
+                    "ITC 402",
+                    "MTH 352",
+                    "STS 206",
+                    "PFR 108",
+                    "BIE 204",
+                    "CHE 202",
+                    "MAE 402",
+                    "CSE 402",
+                    "PHY 308",
+                    "SCE 204",
+                    "ESD 306",
+                    "MLS 108",
+                    "NURS 102",
+                    "PHE 102",
+                    "NURT 312"
+                  ],
+                  "examiners": [
+                    "Kombat EO",
+                    "Motey GA",
+                    "Anemana T",
+                    "Berdie BS",
+                    "Owusu G",
+                    "Mohammed AR",
+                    "Issahaku AS",
+                    "Dang- I YA",
+                    "Armah EK",
+                    "Gati ES",
+                    "Akobre S",
+                    "Laar DS",
+                    "Sandow S",
+                    "Akamba M",
+                    "Salem ES",
+                    "Wilmot D",
+                    "Adams FX",
+                    "Mensah PK",
+                    "Ampfo S",
+                    "Anyorigiya TA",
+                    "Tindan TN",
+                    "Nigarim D"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DCI 106"
+                  ],
+                  "examiners": [
+                    "Wumnaya PA"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "PHY 634",
+                    "BCH 614",
+                    "STS 610",
+                    "CSC 608",
+                    "EPB 606"
+                  ],
+                  "examiners": [
+                    "Balfour EA",
+                    "Logubayom IA",
+                    "Baagyere EY",
+                    "Dassah SD",
+                    "Welaga P"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "day": "TUESDAY",
+          "date": "05/08/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 222",
+                    "MAE 102",
+                    "ENV 326",
+                    "PMP 302",
+                    "ETS 314",
+                    "PHT 144",
+                    "BCH 322",
+                    "SOE 312",
+                    "ICS 308",
+                    "ITC 310",
+                    "MTH 312",
+                    "CDS 310",
+                    "EPB 106",
+                    "SCE 302",
+                    "CHE 406",
+                    "CDS 108",
+                    "MTH 104",
+                    "CDS 426",
+                    "CHE 322",
+                    "EPB 316",
+                    "PFR 318",
+                    "MLS 210",
+                    "PHE 202",
+                    "PHT 332",
+                    "PNUR 306"
+                  ],
+                  "examiners": [
+                    "Awo O",
+                    "Asiedu LO",
+                    "Agana F",
+                    "Etwire CJ",
+                    "Owusu G",
+                    "Shaban SH",
+                    "Amadu CC",
+                    "Agongo G",
+                    "Zamanah E",
+                    "Wumnaya PA",
+                    "Agbedemnab PA",
+                    "Gati ES",
+                    "Kampo S",
+                    "Ayeriga MW",
+                    "Dorsah P",
+                    "Gyamera S",
+                    "Agana F",
+                    "Issahaku AS",
+                    "Baagyere EY",
+                    "Achana F",
+                    "Anaba E",
+                    "Dassah SD",
+                    "Kuugbee ED",
+                    "Tindan TN",
+                    "Ziemah J",
+                    "Kukeba M"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DLT 112",
+                    "DLT 202",
+                    "DSE 204",
+                    "DCS 208"
+                  ],
+                  "examiners": [
+                    "Shaban SH",
+                    "Quansah DK",
+                    "Kuupoole EE",
+                    "Wumnaya PA"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "AEP 634",
+                    "MTH 646",
+                    "CHM 584"
+                  ],
+                  "examiners": [
+                    "Captain-Esoah M",
+                    "Oyelude EO",
+                    "Twum S"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 434",
+                    "BIO 334",
+                    "PHY 208",
+                    "ETS 222",
+                    "PHY 408",
+                    "PHT 214",
+                    "BCH 406",
+                    "CHM 432",
+                    "MTH 214",
+                    "ITC 204",
+                    "CSC 424",
+                    "STS 474",
+                    "EPB 206",
+                    "BIE 208",
+                    "BIE 406",
+                    "ENV 242",
+                    "CHE 208",
+                    "ESD 312",
+                    "MLS 112",
+                    "NURS 106",
+                    "NURT 308",
+                    "SOE 404"
+                  ],
+                  "examiners": [
+                    "Motey GA",
+                    "Adetunde LA",
+                    "Adazabra AN",
+                    "Mohammed AR",
+                    "Bayor JS",
+                    "Pedavoah MM",
+                    "Dassah SD",
+                    "Oluyinka OA",
+                    "Alhassan EA",
+                    "Aabaah I",
+                    "Nakpih CI",
+                    "Wiredu S",
+                    "Ayimbilla EA",
+                    "Ayeriga MW",
+                    "Amadu CC",
+                    "Ampofo S",
+                    "Dorsah P",
+                    "Atulley JA",
+                    "Adazabra AN",
+                    "Akobre S",
+                    "Nigarim D"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DBC 102"
+                  ],
+                  "examiners": [
+                    "Azaare J"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "BCH 612",
+                    "STS 608",
+                    "STS 660",
+                    "ICT 608"
+                  ],
+                  "examiners": [
+                    "Anyorigiya TA",
+                    "Zamanah E",
+                    "Diogbann J",
+                    "Agbedemnab PA"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "day": "WEDNESDAY",
+          "date": "06/08/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 328",
+                    "CHM 102",
+                    "MAE 104",
+                    "ENV 342",
+                    "ENV 446",
+                    "PHY 316",
+                    "ETS 406",
+                    "CHM 232",
+                    "BCH 324",
+                    "CAC 106",
+                    "CAC 306",
+                    "SCE 322",
+                    "CSE 402",
+                    "ICS 102",
+                    "PFR 310",
+                    "FSC 310",
+                    "MAE 304",
+                    "MAE 410",
+                    "MLS 214",
+                    "PHT 362",
+                    "PNUR 310"
+                  ],
+                  "examiners": [
+                    "Captain-Esoah M",
+                    "Atepor S",
+                    "Douti BN",
+                    "Amadu CC",
+                    "Bayor JS",
+                    "Oluyinka AO",
+                    "Adu-Frimpong M",
+                    "Azaare J",
+                    "Mensah V",
+                    "Samari JA",
+                    "Adam FX",
+                    "Wumnaya PA",
+                    "Dang-I A",
+                    "Anaba E",
+                    "Seidu RA",
+                    "Bornaa CS",
+                    "Kuugbee ED",
+                    "Shaban SH",
+                    "Doat AR"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DLT 102",
+                    "DCI 108"
+                  ],
+                  "examiners": [
+                    "Dang-I YA Wumnaya PA"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "PEC 602",
+                    "MCB 610",
+                    "PHY 638",
+                    "MTH 626",
+                    "STS 670",
+                    "CHM 504"
+                  ],
+                  "examiners": [
+                    "Azameti MK",
+                    "Fosu-Amankwah K",
+                    "Twum S",
+                    "Engmann GM",
+                    "Abagale SA"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 224",
+                    "BIO 424",
+                    "ENV 244",
+                    "ESD 110",
+                    "PHY 292",
+                    "ETS 318",
+                    "PHT 222",
+                    "BCH 452",
+                    "CHM 452",
+                    "SOE 208",
+                    "ICS 202",
+                    "MTH 202",
+                    "ITC 404",
+                    "MTH 482",
+                    "MTH 308",
+                    "FCE 206",
+                    "MAE 306",
+                    "CHE 402",
+                    "EPВ 312",
+                    "ESD 308",
+                    "ICS 406",
+                    "MLS 102",
+                    "NURS 112",
+                    "NURT 316"
+                  ],
+                  "examiners": [
+                    "Atujona D",
+                    "Captain-Esoah M",
+                    "Atulley JA",
+                    "Gyasi DA",
+                    "Bayari EE",
+                    "Pedavoah MM",
+                    "Donkor MN",
+                    "Adom DK",
+                    "Alhassan EA",
+                    "Boah DK",
+                    "Aabaah I",
+                    "Kulu E",
+                    "Yaro DS",
+                    "Bukari HI",
+                    "Adams FX",
+                    "Dorsah P",
+                    "Douti BN",
+                    "Gyamfi EO",
+                    "Achana F",
+                    "Asaah M",
+                    "Wumnaya PA",
+                    "Olunyinka AO",
+                    "Achaliwe F"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DLT 210",
+                    "DMG 202",
+                    "DIT 112"
+                  ],
+                  "examiners": [
+                    "Atindana SA",
+                    "Agbedemnab PA"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "ENV 642",
+                    "CHM 544",
+                    "STS 666",
+                    "ICT 616",
+                    "CSC 610",
+                    "CSC 810"
+                  ],
+                  "examiners": [
+                    "Asaah MS",
+                    "Oyelude ED",
+                    "Nasiru S",
+                    "Agbedemnab PA",
+                    "Baagyere EY"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "day": "THURSDAY",
+          "date": "07/08/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "PHY 102",
+                    "PHY 392",
+                    "PMP 304",
+                    "BCH 302",
+                    "BCH 402",
+                    "ITC 302",
+                    "CDS 308",
+                    "ACT 302",
+                    "STS 362",
+                    "PFR 204",
+                    "ITC 202",
+                    "CAC 206",
+                    "STS 202",
+                    "ETS 412",
+                    "BIO 336",
+                    "BIO 308",
+                    "PHT 342",
+                    "PMP 446",
+                    "PNUR 316"
+                  ],
+                  "examiners": [
+                    "Owusu S",
+                    "Gyasi DA",
+                    "Salem ES",
+                    "Anyigba CA",
+                    "Agbedemnab PA",
+                    "Gyamera S",
+                    "Osei-Mainoo A",
+                    "Logubayom IA",
+                    "Anang RC",
+                    "Luu Y",
+                    "Armah DA",
+                    "Kulu E",
+                    "Adu-Frimpong M",
+                    "Awo O",
+                    "Ahia BNK",
+                    "Bayari EE",
+                    "Issahaku AS",
+                    "Ziemah J",
+                    "Abubakari MN",
+                    "Doat AR"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DPH 102",
+                    "DCI 104",
+                    "DIT 102"
+                  ],
+                  "examiners": [
+                    "Mensah PK",
+                    "Adom DK",
+                    "Aabaah I"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "AEP 636",
+                    "MCB 642",
+                    "PHY 662",
+                    "MTH 682",
+                    "ENV 632"
+                  ],
+                  "examiners": [
+                    "Kuugbee ED",
+                    "Kuugbee ED",
+                    "Balfour EA",
+                    "Nantomah K",
+                    "Adonadaga MG"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 212",
+                    "BIO 402",
+                    "PHY 232",
+                    "ETS 212",
+                    "FSC 202",
+                    "PHT 212",
+                    "ICS 204",
+                    "MTH 452",
+                    "STS 464",
+                    "ACT 404",
+                    "MTH 342",
+                    "EPB 104",
+                    "FCE 204",
+                    "BIE 312",
+                    "CAC 102",
+                    "CDS 102",
+                    "CHM 264",
+                    "ETS 310",
+                    "PHE 202",
+                    "EPB 308",
+                    "NURS 116",
+                    "NURT 314"
+                  ],
+                  "examiners": [
+                    "Essel E",
+                    "Adetunde LA",
+                    "Ayimbila EA",
+                    "Fosu-Amankwah K",
+                    "Pedavoah MM",
+                    "Armah DA",
+                    "Moro A",
+                    "Donkor MN",
+                    "Samari JA",
+                    "Gyamfi EO",
+                    "Gyamera S",
+                    "Etwire CJ",
+                    "Zamanah E",
+                    "Abonongo J",
+                    "Seidu B",
+                    "Ahia BNK",
+                    "Apea OB",
+                    "Tindan TN",
+                    "Beeri P",
+                    "Nigarim D"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DCI 206",
+                    "DIT 206",
+                    "FDE 204"
+                  ],
+                  "examiners": [
+                    "Adom DK",
+                    "Aabaah I",
+                    "Samari J"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "STS 626"
+                  ],
+                  "examiners": [
+                    "Abonongo J"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "day": "FRIDAY",
+          "date": "08/08/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 332",
+                    "CHE 102",
+                    "ESD 114",
+                    "ETS 416",
+                    "ICS 206",
+                    "STS 316",
+                    "PFR 102",
+                    "CHM 306",
+                    "MKT 204",
+                    "MTH 306",
+                    "MTH 484",
+                    "MTH 304",
+                    "ETS 308",
+                    "PFR 312",
+                    "ITC 406",
+                    "PNUR 318"
+                  ],
+                  "examiners": [
+                    "Kuugbee ED",
+                    "Abudu F",
+                    "Ampofo S",
+                    "Armah DA",
+                    "Bakaweri EB",
+                    "Angbing ID",
+                    "Salem ES",
+                    "Mbatchou VC",
+                    "Azaare J",
+                    "Osei B",
+                    "Seidu B",
+                    "Kulu E",
+                    "Bayari EE",
+                    "Laar DS",
+                    "Akayuure CA"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DCS 102"
+                  ],
+                  "examiners": [
+                    "Aveyom V"
+                  ]
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [
+                    "AEP 646",
+                    "PHY 636",
+                    "STS 664",
+                    "ICT 610"
+                  ],
+                  "examiners": [
+                    "Angyiereyiri ED",
+                    "Mensah PK",
+                    "Nasiru S",
+                    "Agbedemnab PA"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "FRN 202",
+                    "FRN 402",
+                    "FRN 302",
+                    "FRN 102",
+                    "FMC 110",
+                    "FMC 210",
+                    "EPB 314",
+                    "PHE 216"
+                  ],
+                  "examiners": [
+                    "Lambon AK",
+                    "Salifu RS",
+                    "Tindan TN"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [],
+                  "examiners": []
+                },
+                {
+                  "level": "Postgraduate",
+                  "courses": [],
+                  "examiners": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "note": "NB: Notices of Venues will be displayed on the day of Examination"
+}

@@ -1,0 +1,34 @@
+{
+  "events": [
+    {
+      "course_code": "CS101",
+      "course_title": "Introduction to Computer Science",
+      "day": "Monday",
+      "start_time": "09:00",
+      "end_time": "10:30",
+      "location": "Room A101",
+      "lecturer": "Dr. Smith",
+      "type": "Lecture"
+    },
+    {
+      "course_code": "CS102",
+      "course_title": "Programming Fundamentals",
+      "day": "Tuesday",
+      "start_time": "11:00",
+      "end_time": "12:30",
+      "location": "Lab B201",
+      "lecturer": "Prof. Johnson",
+      "type": "Lab"
+    },
+    {
+      "course_code": "MATH201",
+      "course_title": "Calculus I",
+      "day": "Wednesday",
+      "start_time": "14:00",
+      "end_time": "15:30",
+      "location": "Room C301",
+      "lecturer": "Dr. Wilson",
+      "type": "Lecture"
+    }
+  ]
+}

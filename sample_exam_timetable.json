@@ -1,0 +1,130 @@
+{
+  "university": "C. K. TEDAM UNIVERSITY OF TECHNOLOGY AND APPLIED SCIENCES",
+  "session": "2024/2025 Second Semester",
+  "type": "PROVISIONAL Examination Timetable",
+  "schedule": [
+    {
+      "week": "WEEK ONE",
+      "days": [
+        {
+          "day": "MONDAY",
+          "date": "28/07/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 202",
+                    "ENV 308",
+                    "PMP 344",
+                    "ETS 312",
+                    "PHT 104",
+                    "CHM 322",
+                    "CSC 102",
+                    "CDS 302",
+                    "MTH 314",
+                    "CHE 332"
+                  ],
+                  "examiners": [
+                    "Sarpong SK",
+                    "Ampadu B",
+                    "Abubakari MN",
+                    "Bayari EE",
+                    "Bayuo J"
+                  ]
+                },
+                {
+                  "level": "Diploma",
+                  "courses": [
+                    "DIT 104",
+                    "DCI 202"
+                  ],
+                  "examiners": [
+                    "Olaewe OO",
+                    "Wumnaya PA"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 302",
+                    "BIO 416",
+                    "ENV 424",
+                    "PHY 202",
+                    "ETS 204",
+                    "ENV 204",
+                    "PHT 232",
+                    "CHM 422"
+                  ],
+                  "examiners": [
+                    "Azameti MK",
+                    "Amadu CC",
+                    "Ampadu B",
+                    "Balfour EA"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "day": "TUESDAY",
+          "date": "29/07/2025",
+          "sessions": [
+            {
+              "time": "9:00am",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "GEN 102",
+                    "BIO 204",
+                    "PHY 312",
+                    "PMP 346",
+                    "ETS 304",
+                    "BCH 306"
+                  ],
+                  "examiners": [
+                    "Essel E",
+                    "Yaro DS",
+                    "Zieka MP",
+                    "Gyasi DA"
+                  ]
+                }
+              ]
+            },
+            {
+              "time": "2:00pm",
+              "exams": [
+                {
+                  "level": "Undergraduate",
+                  "courses": [
+                    "BIO 320",
+                    "BIO 404",
+                    "STS 204",
+                    "ETS 206",
+                    "ETS 414",
+                    "PHT 206"
+                  ],
+                  "examiners": [
+                    "Atujona D",
+                    "Azameti MK",
+                    "Zamanah E",
+                    "Akamba M"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

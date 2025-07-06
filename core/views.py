@@ -196,26 +196,12 @@ def parse_and_store_master_timetable(source):
                 data = json.load(f)
                 events_created = 0
 
-                for item in data:
-                    start_time, end_time = parse_time_range(item.get("Time"))
-                    display_code, normalized_code, details = parse_course_string(
-                        item.get("Course", ""))
-
-                    if not all([start_time, end_time, display_code]):
-                        continue
-
-                    TimetableEvent.objects.create(
-                        source=source,
-                        day=item.get("Day", "").title(),
-                        start_time=start_time,
-                        end_time=end_time,
-                        location=item.get("Venue", ""),
-                        course_code=display_code,
-                        normalized_code=normalized_code,
-                        details=details,
-                        lecturer=item.get("Instructor(s)", ""),
-                    )
-                    events_created += 1
+                # Check if this is an exam timetable format
+                if source.timetable_type == 'exam' and isinstance(data, dict) and 'schedule' in data:
+                    events_created = parse_exam_timetable(source, data)
+                else:
+                    # Parse as teaching timetable (original format)
+                    events_created = parse_teaching_timetable(source, data)
 
                 # Update source status
                 source.status = TimetableSource.COMPLETED
@@ -232,6 +218,99 @@ def parse_and_store_master_timetable(source):
         source.status = TimetableSource.FAILED
         source.save()
         return False
+
+
+def parse_exam_timetable(source, data):
+    """Parse exam timetable format and create events."""
+    events_created = 0
+
+    for week_data in data.get('schedule', []):
+        for day_data in week_data.get('days', []):
+            day = day_data.get('day', '').title()
+            date = day_data.get('date', '')
+
+            for session in day_data.get('sessions', []):
+                time = session.get('time', '')
+
+                # Parse time (e.g., "9:00am" -> start and end times)
+                start_time, end_time = parse_exam_time(time)
+                if not start_time or not end_time:
+                    continue
+
+                for exam in session.get('exams', []):
+                    level = exam.get('level', '')
+                    courses = exam.get('courses', [])
+
+                    for course_code in courses:
+                        if course_code.strip():
+                            # Create event for each course
+                            TimetableEvent.objects.create(
+                                source=source,
+                                day=day,
+                                start_time=start_time,
+                                end_time=end_time,
+                                location="",  # Venue not specified in exam format
+                                course_code=course_code.strip(),
+                                normalized_code=normalize_course_code(
+                                    course_code.strip()),
+                                details=f"Level: {level}, Date: {date}",
+                                lecturer="",  # No lecturer for exams
+                            )
+                            events_created += 1
+
+    return events_created
+
+
+def parse_teaching_timetable(source, data):
+    """Parse teaching timetable format (original format)."""
+    events_created = 0
+
+    for item in data:
+        start_time, end_time = parse_time_range(item.get("Time"))
+        display_code, normalized_code, details = parse_course_string(
+            item.get("Course", ""))
+
+        if not all([start_time, end_time, display_code]):
+            continue
+
+        TimetableEvent.objects.create(
+            source=source,
+            day=item.get("Day", "").title(),
+            start_time=start_time,
+            end_time=end_time,
+            location=item.get("Venue", ""),
+            course_code=display_code,
+            normalized_code=normalized_code,
+            details=details,
+            lecturer=item.get("Instructor(s)", ""),
+        )
+        events_created += 1
+
+    return events_created
+
+
+def parse_exam_time(time_str):
+    """Parse exam time format like '9:00am' and create start/end times."""
+    try:
+        from datetime import datetime, timedelta
+
+        # Clean the time string
+        time_str = time_str.strip().lower()
+
+        # Parse the time
+        if 'am' in time_str or 'pm' in time_str:
+            # Handle formats like "9:00am", "2:00pm"
+            time_obj = datetime.strptime(time_str, '%I:%M%p').time()
+
+            # Assume exam duration is 3 hours
+            start_datetime = datetime.combine(datetime.today(), time_obj)
+            end_datetime = start_datetime + timedelta(hours=3)
+
+            return time_obj, end_datetime.time()
+
+        return None, None
+    except (ValueError, AttributeError):
+        return None, None
 
 
 def parse_master_timetable(source):
@@ -367,17 +446,49 @@ class AdminDashboardView(LoginRequiredMixin, View):
                         # Parse new events
                         try:
                             if parse_and_store_master_timetable(timetable_source):
+                                # Get file size for display
+                                file_size = timetable_source.source_json.size
+                                file_size_mb = round(
+                                    file_size / (1024 * 1024), 2)
+
                                 messages.success(
-                                    request, f"'{timetable_source.display_name}' has been updated and reprocessed successfully. {timetable_source.total_events} events stored.")
+                                    request,
+                                    f"🔄 Timetable Updated Successfully!\n"
+                                    f"📋 Name: {timetable_source.display_name}\n"
+                                    f"📅 Academic Year: {timetable_source.academic_year}\n"
+                                    f"📚 Semester: {timetable_source.semester}\n"
+                                    f"🏷️ Type: {timetable_source.get_timetable_type_display()}\n"
+                                    f"📄 New File Size: {file_size_mb} MB\n"
+                                    f"📊 Events Reprocessed: {timetable_source.total_events}\n"
+                                    f"⏰ Updated: {timetable_source.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
+                                )
                             else:
                                 messages.warning(
-                                    request, f"'{timetable_source.display_name}' was updated but failed to process. Please check the JSON format.")
+                                    request,
+                                    f"⚠️ Update Warning!\n"
+                                    f"📋 File: {timetable_source.display_name}\n"
+                                    f"❌ Status: Reprocessing failed\n"
+                                    f"💡 Suggestion: Please check the JSON format and try again."
+                                )
                         except Exception as e:
                             messages.error(
-                                request, f"'{timetable_source.display_name}' was updated but processing failed: {str(e)}")
+                                request,
+                                f"❌ Update Error!\n"
+                                f"📋 File: {timetable_source.display_name}\n"
+                                f"🚫 Error: {str(e)}\n"
+                                f"💡 Suggestion: Verify JSON structure and file integrity."
+                            )
                     else:
                         messages.success(
-                            request, f"'{timetable_source.display_name}' has been updated successfully.")
+                            request,
+                            f"✅ Timetable Details Updated!\n"
+                            f"📋 Name: {timetable_source.display_name}\n"
+                            f"📅 Academic Year: {timetable_source.academic_year}\n"
+                            f"📚 Semester: {timetable_source.semester}\n"
+                            f"🏷️ Type: {timetable_source.get_timetable_type_display()}\n"
+                            f"📊 Events: {timetable_source.total_events} (unchanged)\n"
+                            f"⏰ Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                        )
 
                     return redirect('admin_dashboard')
                 else:
@@ -405,14 +516,37 @@ class AdminDashboardView(LoginRequiredMixin, View):
                 # Parse and store events immediately after upload
                 try:
                     if parse_and_store_master_timetable(timetable_source):
+                        # Get file size for display
+                        file_size = timetable_source.source_json.size
+                        file_size_mb = round(file_size / (1024 * 1024), 2)
+
                         messages.success(
-                            request, f"'{timetable_source.display_name}' has been uploaded and processed successfully. {timetable_source.total_events} events stored.")
+                            request,
+                            f"✅ Master Timetable Upload Successful!\n"
+                            f"📋 Name: {timetable_source.display_name}\n"
+                            f"📅 Academic Year: {timetable_source.academic_year}\n"
+                            f"📚 Semester: {timetable_source.semester}\n"
+                            f"🏷️ Type: {timetable_source.get_timetable_type_display()}\n"
+                            f"📄 File Size: {file_size_mb} MB\n"
+                            f"📊 Events Processed: {timetable_source.total_events}\n"
+                            f"⏰ Upload Time: {timetable_source.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
+                        )
                     else:
                         messages.warning(
-                            request, f"'{timetable_source.display_name}' was uploaded but failed to process. Please check the JSON format.")
+                            request,
+                            f"⚠️ Upload Warning!\n"
+                            f"📋 File: {timetable_source.display_name}\n"
+                            f"❌ Status: Processing failed\n"
+                            f"💡 Suggestion: Please check the JSON format and try again."
+                        )
                 except Exception as e:
                     messages.error(
-                        request, f"'{timetable_source.display_name}' was uploaded but processing failed: {str(e)}")
+                        request,
+                        f"❌ Upload Error!\n"
+                        f"📋 File: {timetable_source.display_name}\n"
+                        f"🚫 Error: {str(e)}\n"
+                        f"💡 Suggestion: Verify JSON structure and file integrity."
+                    )
 
                 return redirect('admin_dashboard')
 
@@ -499,6 +633,9 @@ class StudentDashboardView(LoginRequiredMixin, View):
         # Get user's course registration history
         history = CourseRegistrationHistory.objects.filter(
             user=request.user).order_by('-last_used')[:5]
+
+
+
         return render(request, 'core/student_dashboard.html', {
             'sources': sources,
             'history': history
@@ -588,8 +725,46 @@ class StudentDashboardView(LoginRequiredMixin, View):
                 program=program or None,
                 level=level or None
             )
+
+            # Display detailed upload information
+            file_size = course_reg_pdf.size
+            file_size_mb = round(file_size / (1024 * 1024), 2)
+            total_events = len(student_events)
+            total_courses = len(student_course_codes)
+
+            # Count events per day
+            events_per_day = {}
+            for day in days_of_week:
+                day_events = len(schedule.get(day, []))
+                if day_events > 0:
+                    events_per_day[day] = day_events
+
+            day_summary = ", ".join(
+                [f"{day}: {count}" for day, count in events_per_day.items()])
+
+            messages.success(
+                request,
+                f"🎉 Course Registration Processed Successfully!\n"
+                f"📄 File: {course_reg_pdf.name}\n"
+                f"📊 File Size: {file_size_mb} MB\n"
+                f"🎯 Timetable Source: {source.display_name}\n"
+                f"📚 Courses Found: {total_courses} ({', '.join(sorted(student_course_codes))})\n"
+                f"📅 Events Generated: {total_events}\n"
+                f"📋 Schedule: {day_summary if day_summary else 'No events scheduled'}\n"
+                f"👤 Program: {program or 'Not specified'}\n"
+                f"🎓 Level: {level or 'Not specified'}\n"
+                f"⏰ Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            )
+
         except Exception as e:
             print(f"Error saving history: {e}")
+            messages.warning(
+                request,
+                f"⚠️ Timetable generated but history save failed.\n"
+                f"📚 Courses: {len(student_course_codes)} found\n"
+                f"📅 Events: {len(student_events)} generated\n"
+                f"❌ Error: {str(e)}"
+            )
 
         # Get updated history for display
         history = CourseRegistrationHistory.objects.filter(
@@ -643,8 +818,33 @@ def reuse_course_registration(request, history_id):
         history_list = CourseRegistrationHistory.objects.filter(
             user=request.user).order_by('-last_used')[:5]
 
+        # Display detailed reuse information
+        total_events = len(student_events)
+        total_courses = len(course_codes)
+
+        # Count events per day
+        events_per_day = {}
+        for day in days_of_week:
+            day_events = len(schedule.get(day, []))
+            if day_events > 0:
+                events_per_day[day] = day_events
+
+        day_summary = ", ".join(
+            [f"{day}: {count}" for day, count in events_per_day.items()])
+
         messages.success(
-            request, f"Reused registration: {history.display_name}")
+            request,
+            f"♻️ Course Registration Reused Successfully!\n"
+            f"📋 Registration: {history.display_name}\n"
+            f"🎯 Timetable Source: {history.source.display_name}\n"
+            f"📚 Courses: {total_courses} ({', '.join(sorted(course_codes))})\n"
+            f"📅 Events Generated: {total_events}\n"
+            f"📋 Schedule: {day_summary if day_summary else 'No events scheduled'}\n"
+            f"👤 Program: {history.program or 'Not specified'}\n"
+            f"🎓 Level: {history.level or 'Not specified'}\n"
+            f"📅 Originally Created: {history.created_at.strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f"⏰ Reused: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        )
 
         return render(request, 'core/student_dashboard.html', {
             'sources': sources,
@@ -692,19 +892,11 @@ def download_timetable_pdf(request):
     schedule = {day: sorted([e for e in event_objects if e.day == day],
                             key=lambda x: x.start_time) for day in days_of_week}
 
-    # Select template based on user choice
-    template_map = {
-        'modern': 'core/timetable_pdf_modern.html',
-        'minimal': 'core/timetable_pdf_minimal.html',
-        'neon': 'core/timetable_pdf_neon.html',
-        'grid': 'core/timetable_pdf_grid.html'
-    }
-
-    template_path = template_map.get(
-        template_type, 'core/timetable_pdf_modern.html')
+    # Only grid template available
+    template_path = 'core/timetable_pdf_grid.html'
     template = get_template(template_path)
     html = template.render(
-        {'schedule': schedule, 'days_of_week': days_of_week, 'source_name': source.display_name, 'template_type': template_type})
+        {'schedule': schedule, 'days_of_week': days_of_week, 'source_name': source.display_name, 'template_type': template_type, 'source': source})
 
     result = BytesIO()
     pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result)
@@ -869,7 +1061,7 @@ def download_timetable_jpg(request):
         day_events = schedule.get(day, [])
         if day_events:
             card_width = 200   # Increased width for larger text
-            card_height = 110  # Increased height for larger text
+            card_height = 120  # Increased height for day + content
             card_spacing = 12  # Increased spacing between cards
             cards_per_row = events_col_width // (card_width + card_spacing)
 
@@ -901,17 +1093,35 @@ def download_timetable_jpg(request):
                 draw.text((card_x + 12, card_y + 35),
                           time_text, fill='#334155', font=small_font)
 
+                # Date for exam schedules (moved up and made more prominent)
+                y_offset = 60
+                if source.timetable_type == 'exam' and hasattr(event, 'details') and event.details:
+                    # Extract date from details field (format: "Level: {level}, Date: {date}")
+                    if "Date: " in event.details:
+                        date_part = event.details.split(
+                            "Date: ")[1] if "Date: " in event.details else ""
+                        if date_part:
+                            date_text = date_part[:15] + \
+                                "..." if len(date_part) > 15 else date_part
+                            draw.text((card_x + 12, card_y + 60),
+                                      f"📅 {date_text}", fill='#dc2626', font=small_font)
+                            y_offset = 85
+
+
+
                 # Location (truncated, larger text)
-                location_text = event.location[:18] + \
-                    "..." if len(event.location) > 18 else event.location
-                draw.text((card_x + 12, card_y + 60),
-                          f"📍 {location_text}", fill='#475569', font=small_font)
+                if event.location:
+                    location_text = event.location[:18] + \
+                        "..." if len(event.location) > 18 else event.location
+                    draw.text((card_x + 12, y_offset),
+                              f"📍 {location_text}", fill='#475569', font=small_font)
+                    y_offset += 25
 
                 # Lecturer (truncated, larger text)
-                lecturer_text = event.lecturer[:16] + \
-                    "..." if len(event.lecturer) > 16 else event.lecturer
-                if lecturer_text:
-                    draw.text((card_x + 12, card_y + 85),
+                if event.lecturer:
+                    lecturer_text = event.lecturer[:16] + \
+                        "..." if len(event.lecturer) > 16 else event.lecturer
+                    draw.text((card_x + 12, y_offset),
                               f"👨‍🏫 {lecturer_text}", fill='#475569', font=small_font)
         else:
             # Empty state - no classes for this day

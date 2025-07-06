@@ -31,4 +31,5 @@ urlpatterns = [
     # --- ADDED: URL for reusing course registration ---
     path('reuse-registration/<int:history_id>/', reuse_course_registration,
          name='reuse_course_registration'),
+
 ]
