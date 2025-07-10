@@ -1,14 +1,12 @@
 # core/urls.py
 from django.urls import path
 from django.shortcuts import redirect
-from .views import AdminDashboardView, StudentDashboardView, SignupView, UserProfileView, download_timetable_pdf, download_timetable_jpg, delete_timetable_source, reuse_course_registration, PublicTimetablesView
+from .views import AdminDashboardView, TimetableGeneratorView, SignupView, UserProfileView, download_timetable_pdf, download_timetable_jpg, delete_timetable_source, reuse_course_registration, PublicTimetablesView
 
 
 def home_redirect(request):
-    if request.user.is_authenticated:
-        return redirect('student_dashboard')
-    else:
-        return redirect('login')
+    # Always redirect to the unified timetable generator
+    return redirect('timetable_generator')
 
 
 urlpatterns = [
@@ -16,8 +14,9 @@ urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
     path('profile/', UserProfileView.as_view(), name='profile'),
     path('dashboard/admin', AdminDashboardView.as_view(), name='admin_dashboard'),
-    path('student-dashboard/', StudentDashboardView.as_view(),
-         name='student_dashboard'),
+    # --- UPDATED: Unified timetable generator (works for both authenticated and anonymous users) ---
+    path('generate/', TimetableGeneratorView.as_view(),
+         name='timetable_generator'),
     # --- ADDED: Public timetables view ---
     path('timetables/', PublicTimetablesView.as_view(), name='public_timetables'),
     # --- ADDED: URL for the download feature ---

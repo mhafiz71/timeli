@@ -64,21 +64,21 @@
                             <input type="text" name="{{ edit_form.academic_year.name }}"
                                 id="{{ edit_form.academic_year.id_for_label }}"
                                 value="{{ edit_form.academic_year.value|default:'' }}"
-                                class="input-modern block w-full px-4 py-3 rounded-md" placeholder="e.g., 2024-2025">
+                                class="input-modern block w-full px-4 py-3 rounded-lg" placeholder="e.g., 2024-2025">
                         </div>
                         <div>
                             <label for="{{ edit_form.semester.id_for_label }}"
                                 class="block text-sm font-medium text-gray-300 mb-2">Semester</label>
                             <input type="text" name="{{ edit_form.semester.name }}" id="{{ edit_form.semester.id_for_label }}"
                                 value="{{ edit_form.semester.value|default:'' }}"
-                                class="input-modern block w-full px-4 py-3 rounded-md" placeholder="e.g., Fall, Spring">
+                                class="input-modern block w-full px-4 py-3 rounded-lg" placeholder="e.g., Fall, Spring">
                         </div>
                         <div>
                             <label for="{{ edit_form.display_name.id_for_label }}"
                                 class="block text-sm font-medium text-gray-300 mb-2">Display Name</label>
                             <input type="text" name="{{ edit_form.display_name.name }}"
                                 id="{{ edit_form.display_name.id_for_label }}" value="{{ edit_form.display_name.value|default:'' }}"
-                                class="input-modern block w-full px-4 py-3 rounded-md" placeholder="e.g., Fall 2024 Timetable">
+                                class="input-modern block w-full px-4 py-3 rounded-lg" placeholder="e.g., Fall 2024 Timetable">
                         </div>
                         <div>
                             <label for="{{ edit_form.timetable_type.id_for_label }}"
@@ -89,7 +89,7 @@
                             <label for="{{ edit_form.description.id_for_label }}"
                                 class="block text-sm font-medium text-gray-300 mb-2">Description (Optional)</label>
                             <textarea name="{{ edit_form.description.name }}" id="{{ edit_form.description.id_for_label }}" rows="3"
-                                class="input-modern block w-full px-4 py-3 rounded-md resize-none"
+                                class="input-modern block w-full px-4 py-3 rounded-lg resize-none"
                                 placeholder="Optional: Add description for this timetable">{{ edit_form.description.value|default:'' }}</textarea>
                         </div>
                         <div>
@@ -99,7 +99,7 @@
                             <div class="relative">
                                 <input type="file" name="{{ edit_form.source_json.name }}"
                                     id="{{ edit_form.source_json.id_for_label }}" accept=".json"
-                                    class="input-modern block w-full px-4 py-3 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                    class="input-modern block w-full px-4 py-3 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                             </div>
                             <p class="text-xs text-gray-400 mt-1">Note: Uploading a new JSON file will reprocess all events for this
                                 timetable</p>
@@ -136,15 +136,18 @@
                         {% csrf_token %}
                         <div>
                             <label for="{{ form.academic_year.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">Academic Year</label>
-                            <input type="text" name="{{ form.academic_year.name }}" id="{{ form.academic_year.id_for_label }}" class="input-modern block w-full px-4 py-3 rounded-md" placeholder="e.g., 2024/2025">
+                            <input type="text" name="{{ form.academic_year.name }}" id="{{ form.academic_year.id_for_label }}"
+                                class="input-modern block w-full px-4 py-3 rounded-lg" placeholder="e.g., 2024/2025">
                         </div>
                         <div>
                             <label for="{{ form.semester.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">Semester</label>
-                            <input type="text" name="{{ form.semester.name }}" id="{{ form.semester.id_for_label }}" class="input-modern block w-full px-4 py-3 rounded-md" placeholder="e.g., First Semester">
+                            <input type="text" name="{{ form.semester.name }}" id="{{ form.semester.id_for_label }}"
+                                class="input-modern block w-full px-4 py-3 rounded-lg" placeholder="e.g., First Semester">
                         </div>
                         <div>
                             <label for="{{ form.display_name.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">Display Name</label>
-                            <input type="text" name="{{ form.display_name.name }}" id="{{ form.display_name.id_for_label }}" class="input-modern block w-full px-4 py-3 rounded-md" placeholder="e.g., Fall 2024 Timetable">
+                            <input type="text" name="{{ form.display_name.name }}" id="{{ form.display_name.id_for_label }}"
+                                class="input-modern block w-full px-4 py-3 rounded-lg" placeholder="e.g., Fall 2024 Timetable">
                         </div>
                         <div>
                             <label for="{{ form.timetable_type.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">Timetable
@@ -155,14 +158,15 @@
                             <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">Description
                                 (Optional)</label>
                             <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="3"
-                                class="input-modern block w-full px-4 py-3 rounded-md resize-none"
+                                class="input-modern block w-full px-4 py-3 rounded-lg resize-none"
                                 placeholder="Optional: Add description for this timetable (e.g., Computer Science Department, First Year Students, etc.)"></textarea>
                             </div>
                             <div>
                             <label for="{{ form.source_json.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">Timetable JSON File</label>
                             <div class="relative">
                                 <input type="file" name="{{ form.source_json.name }}" accept=".json" required id="{{ form.source_json.id_for_label }}" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                <div class="input-modern border-2 border-dashed border-white/20 rounded-md p-6 text-center hover:border-blue-400 transition-all duration-300">
+                                <div
+                                    class="input-modern border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-blue-400 transition-all duration-300">
                                     <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
                                         <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>

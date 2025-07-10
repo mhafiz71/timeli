@@ -37,20 +37,19 @@
                     </button>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <div class="inline-flex items-center px-3 py-1 rounded-lg bg-blue-500/20 text-blue-300 text-sm font-medium">
+                    <div class="inline-flex items-center px-3 py-1 rounded-lg bg-green-500/20 text-green-300 text-sm font-medium">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
                         </svg>
-                        View Only
+                        Full Access
                     </div>
-                    {% if user.is_authenticated %}
-                    <a href="{% url 'student_dashboard' %}" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
-                        Go to Dashboard
+                    <a href="{% url 'timetable_generator' %}" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+                        🎯 Generate Timetable
                     </a>
-                    {% else %}
-                    <a href="{% url 'login' %}" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
-                        Login to Generate Timetable
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'signup' %}" class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium">
+                        Sign Up for More Features
                     </a>
                     {% endif %}
                 </div>
@@ -127,17 +126,10 @@
 
                 <!-- Action Buttons -->
                 <div class="border-t border-white/10 pt-4">
-                    {% if user.is_authenticated %}
-                    <a href="{% url 'student_dashboard' %}?source={{ tt.id }}" 
-                       class="btn-primary w-full py-2 rounded-lg text-sm font-medium text-center block">
-                        Use This Timetable
+                    <a href="{% url 'timetable_generator' %}?source={{ tt.id }}"
+                        class="btn-primary w-full py-2 rounded-lg text-sm font-medium text-center block">
+                        Generate Timetable
                     </a>
-                    {% else %}
-                    <a href="{% url 'login' %}?next={% url 'student_dashboard' %}%3Fsource%3D{{ tt.id }}" 
-                       class="btn-secondary w-full py-2 rounded-lg text-sm font-medium text-center block">
-                        Login to Use This Timetable
-                    </a>
-                    {% endif %}
                 </div>
             </div>
             {% endfor %}
@@ -181,7 +173,7 @@
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                This is a read-only view. To generate your personal timetable, please log in and go to your dashboard.
+                Full timetable generation available for everyone. Create an account to save and reuse your course registrations.
             </div>
         </div>
     </div>

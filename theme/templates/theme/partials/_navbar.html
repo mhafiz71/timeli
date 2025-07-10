@@ -37,12 +37,16 @@
                 <!-- Browse Timetables - Always visible -->
                 <a href="{% url 'public_timetables' %}"
                     class="text-gray-300 hover:text-white text-sm font-medium transition-colors duration-200">Browse Timetables</a>
+                <!-- Generate Timetable - Always visible -->
+                <a href="{% url 'timetable_generator' %}"
+                    class="text-gray-300 hover:text-white text-sm font-medium transition-colors duration-200">Generate Timetable</a>
 
                 {% if user.is_authenticated %}
                     {% if user.is_staff %}
                         <a href="{% url 'admin_dashboard' %}" class="text-gray-300 hover:text-white text-sm font-medium transition-colors duration-200">Admin Dashboard</a>
                     {% else %}
-                        <a href="{% url 'student_dashboard' %}" class="text-gray-300 hover:text-white text-sm font-medium transition-colors duration-200">Dashboard</a>
+                        <a href="{% url 'timetable_generator' %}"
+                            class="text-gray-300 hover:text-white text-sm font-medium transition-colors duration-200">Dashboard</a>
                     {% endif %}
 
                     <!-- Profile Dropdown -->

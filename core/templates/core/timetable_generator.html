@@ -1,0 +1,297 @@
+{% extends "theme/base.html" %}
+{% block title %}{% if is_authenticated %}Dashboard{% else %}Generate Timetable{% endif %}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen"
+     x-data="{
+         loading: false,
+         searchTerm: '',
+         selectedTemplate: 'grid',
+         viewMode: 'cards',
+         showManualInput: false
+     }"
+     x-init="
+         // Auto-select source if provided in URL
+         {% if selected_source %}
+         document.querySelector('select[name=timetable_source]').value = '{{ selected_source.id }}';
+         {% endif %}
+     ">
+
+    <!-- Header -->
+    <div class="border-b border-white/10 bg-black/20 backdrop-blur-sm">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                <div class="mb-6 lg:mb-0">
+                    <h1 class="text-3xl font-semibold text-white mb-2">
+                        {% if is_authenticated %}Your Dashboard{% else %}Generate Timetable{% endif %}
+                    </h1>
+                    <p class="text-gray-400">
+                        {% if is_authenticated %}
+                        Upload your course registration or enter course codes to generate your personalized timetable
+                        {% else %}
+                        Upload your course registration or enter course codes to generate a personalized timetable - no account required!
+                        {% endif %}
+                    </p>
+                </div>
+                
+                {% if not is_authenticated %}
+                <div class="flex space-x-3">
+                    <a href="{% url 'public_timetables' %}" class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium">
+                        Browse Timetables
+                    </a>
+                    <a href="{% url 'signup' %}" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+                        Sign Up to Save History
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 py-8">
+        <!-- Timetable Generation Form -->
+        <div class="max-w-4xl mx-auto mb-8">
+            <form method="post" enctype="multipart/form-data" class="glass p-6 rounded-xl">
+                {% csrf_token %}
+                
+                <!-- Source Selection -->
+                <div class="mb-6">
+                    <label for="timetable_source" class="block text-sm font-medium text-gray-300 mb-2">
+                        Select Timetable Source
+                    </label>
+                    <select name="timetable_source" id="timetable_source" required
+                            class="input-modern w-full px-4 py-3 rounded-lg">
+                        <option value="">Choose a timetable source...</option>
+                        {% for source in sources %}
+                        <option value="{{ source.id }}" 
+                                {% if selected_source and selected_source.id == source.id %}selected{% endif %}>
+                            {{ source.display_name }} ({{ source.academic_year }} - {{ source.semester }})
+                            {% if source.timetable_type != 'teaching' %} - {{ source.get_timetable_type_display }}{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Input Method Toggle -->
+                <div class="mb-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <button type="button" @click="showManualInput = false"
+                                :class="!showManualInput ? 'btn-primary' : 'btn-secondary'"
+                                class="px-4 py-2 rounded-lg text-sm font-medium">
+                            📄 Upload PDF
+                        </button>
+                        <button type="button" @click="showManualInput = true"
+                                :class="showManualInput ? 'btn-primary' : 'btn-secondary'"
+                                class="px-4 py-2 rounded-lg text-sm font-medium">
+                            📝 Enter Course Codes
+                        </button>
+                    </div>
+
+                    <!-- PDF Upload (available for all users) -->
+                    <div x-show="!showManualInput" class="space-y-4">
+                        <div>
+                            <label for="course_reg_pdf" class="block text-sm font-medium text-gray-300 mb-2">
+                                Course Registration PDF
+                            </label>
+                            <input type="file" name="course_reg_pdf" id="course_reg_pdf"
+                                   accept=".pdf" class="input-modern w-full px-4 py-3 rounded-lg">
+                        </div>
+                        
+                        <!-- Program and Level -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="program" class="block text-sm font-medium text-gray-300 mb-2">
+                                    Program (Optional)
+                                </label>
+                                <input type="text" name="program" id="program"
+                                       placeholder="e.g., BSc Computer Science"
+                                       class="input-modern w-full px-4 py-3 rounded-lg">
+                            </div>
+                            <div>
+                                <label for="level" class="block text-sm font-medium text-gray-300 mb-2">
+                                    Level (Optional)
+                                </label>
+                                <input type="text" name="level" id="level"
+                                       placeholder="e.g., 300, Year 3"
+                                       class="input-modern w-full px-4 py-3 rounded-lg">
+                            </div>
+                        </div>
+                        {% if not is_authenticated %}
+                        <div class="mt-4 p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg">
+                            <p class="text-blue-200 text-sm">
+                                💡 <a href="{% url 'signup' %}" class="text-blue-400 hover:text-blue-300 underline">Create an account</a>
+                                to save your program and level information for future use.
+                            </p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Manual Course Code Input -->
+                    <div x-show="showManualInput" class="space-y-4">
+                        <div>
+                            <label for="course_codes" class="block text-sm font-medium text-gray-300 mb-2">
+                                Enter Course Codes
+                            </label>
+                            <textarea name="course_codes" id="course_codes" rows="4"
+                                      placeholder="Enter your course codes separated by commas or new lines&#10;Example: CS101, MATH201, PHY301"
+                                      class="input-modern w-full px-4 py-3 rounded-lg">{{ course_codes_input }}</textarea>
+                            <p class="text-gray-400 text-sm mt-2">
+                                Enter course codes separated by commas, spaces, or new lines
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Generate Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn-primary px-8 py-3 rounded-lg font-medium">
+                        🎯 Generate Timetable
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Course Registration History (authentication required for saving/reusing data) -->
+        {% if is_authenticated and history %}
+        <div class="max-w-2xl mx-auto mb-8">
+            <div class="glass p-6 rounded-xl">
+                <div class="flex items-center mb-4">
+                    <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white">Saved Course Registrations</h3>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Quickly reuse your previously saved course registrations</p>
+                
+                <div class="space-y-3">
+                    {% for item in history %}
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors duration-200">
+                        <div class="flex-1">
+                            <div class="font-medium text-white text-sm">{{ item.display_name }}</div>
+                            <div class="flex items-center text-gray-400 text-xs mt-1 space-x-3">
+                                <span>{{ item.get_course_count }} course{{ item.get_course_count|pluralize }}</span>
+                                <span>•</span>
+                                <span>{{ item.last_used|date:"M j, Y" }}</span>
+                            </div>
+                        </div>
+                        <a href="{% url 'reuse_course_registration' item.id %}"
+                            class="btn-primary px-3 py-1 text-xs font-medium rounded-lg">
+                            Reuse
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% elif not is_authenticated %}
+        <!-- Information for unauthenticated users about saving history -->
+        <div class="max-w-2xl mx-auto mb-8">
+            <div class="glass p-6 rounded-xl border-2 border-dashed border-blue-400/30">
+                <div class="flex items-center mb-4">
+                    <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white">Save Your Course Registrations</h3>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">
+                    Create an account to save your course registrations and reuse them for future timetable generation.
+                </p>
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'signup' %}" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+                        Create Account
+                    </a>
+                    <a href="{% url 'login' %}" class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium">
+                        Login
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Results Section -->
+        {% if show_results %}
+        <div class="max-w-6xl mx-auto">
+            <div class="glass p-6 rounded-xl">
+                <!-- Timetable Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-white mb-2">Your Generated Timetable</h2>
+                        <p class="text-gray-300 text-sm">
+                            Source: {{ selected_source.display_name }} | 
+                            Found {{ schedule|length }} day{{ schedule|length|pluralize }} with events
+                        </p>
+                    </div>
+                    
+                    <!-- Download Buttons -->
+                    <div class="flex space-x-3">
+                        <a href="{{ pdf_url }}" class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium">
+                            📄 Download PDF
+                        </a>
+                        <a href="{{ jpg_url }}" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
+                            🖼️ Download JPG
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Timetable Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4">
+                    {% for day, events in schedule.items %}
+                    <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                        <h3 class="font-semibold text-white mb-3 text-center">{{ day }}</h3>
+                        
+                        {% if events %}
+                            <div class="space-y-2">
+                                {% for event in events %}
+                                <div class="bg-blue-500/20 border border-blue-400/30 rounded-lg p-3">
+                                    <div class="font-medium text-blue-100 text-sm mb-1">
+                                        {{ event.course_code }}
+                                    </div>
+                                    <div class="text-blue-200 text-xs mb-2">
+                                        {{ event.start_time|time:"H:i" }} - {{ event.end_time|time:"H:i" }}
+                                    </div>
+                                    {% if event.location %}
+                                    <div class="text-blue-300 text-xs">
+                                        📍 {{ event.location }}
+                                    </div>
+                                    {% endif %}
+                                    {% if event.lecturer %}
+                                    <div class="text-blue-300 text-xs">
+                                        👨‍🏫 {{ event.lecturer }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-center text-gray-400 text-sm py-4">
+                                No classes
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-6 text-center space-x-4">
+                    <a href="{% url 'timetable_generator' %}" class="btn-secondary px-6 py-2 rounded-lg font-medium">
+                        🔄 Generate Another
+                    </a>
+                    {% if not is_authenticated %}
+                    <a href="{% url 'signup' %}" class="btn-primary px-6 py-2 rounded-lg font-medium">
+                        💾 Sign Up to Save History
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

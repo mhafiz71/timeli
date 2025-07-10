@@ -626,66 +626,109 @@ def save_course_registration_history(user, source, course_codes, display_name=No
         return None
 
 
-# --- FIXED: StudentDashboardView with improved course code extraction and matching ---
-class StudentDashboardView(LoginRequiredMixin, View):
+# --- UPDATED: TimetableGeneratorView - Works for both authenticated and anonymous users ---
+class TimetableGeneratorView(View):
     def get(self, request):
-        sources = TimetableSource.objects.all().order_by('-created_at')
-        # Get user's course registration history
-        history = CourseRegistrationHistory.objects.filter(
-            user=request.user).order_by('-last_used')[:5]
+        sources = TimetableSource.objects.filter(
+            status=TimetableSource.COMPLETED
+        ).order_by('-created_at')
 
+        # Get user's course registration history only if authenticated
+        history = []
+        if request.user.is_authenticated:
+            history = CourseRegistrationHistory.objects.filter(
+                user=request.user).order_by('-last_used')[:5]
 
+        # Get selected source if provided
+        selected_source_id = request.GET.get('source')
+        selected_source = None
+        if selected_source_id:
+            try:
+                selected_source = TimetableSource.objects.get(
+                    id=selected_source_id,
+                    status=TimetableSource.COMPLETED
+                )
+            except TimetableSource.DoesNotExist:
+                messages.error(request, 'Selected timetable source not found.')
 
-        return render(request, 'core/student_dashboard.html', {
+        return render(request, 'core/timetable_generator.html', {
             'sources': sources,
-            'history': history
+            'history': history,
+            'selected_source': selected_source,
+            'is_authenticated': request.user.is_authenticated
         })
 
     def post(self, request):
-        sources = TimetableSource.objects.all().order_by('-created_at')
-        source_id = request.POST.get('timetable_source')
+        sources = TimetableSource.objects.filter(
+            status=TimetableSource.COMPLETED
+        ).order_by('-created_at')
+
+        # Handle both PDF upload and manual course code input
+        source_id = request.POST.get(
+            'timetable_source') or request.POST.get('source_id')
         course_reg_pdf = request.FILES.get('course_reg_pdf')
+        course_codes_input = request.POST.get('course_codes', '').strip()
         program = request.POST.get('program', '').strip()
         level = request.POST.get('level', '').strip()
 
-        if not source_id or not course_reg_pdf:
+        if not source_id:
+            messages.error(request, 'Please select a timetable source.')
+            return self.get(request)
+
+        # Require either PDF upload or manual course codes
+        if not course_reg_pdf and not course_codes_input:
             messages.error(
-                request, 'Please select a timetable and upload your file.')
-            return render(request, 'core/student_dashboard.html', {'sources': sources})
+                request, 'Please either upload your course registration PDF or enter course codes manually.')
+            return self.get(request)
 
         student_course_codes = set()
         raw_extracted_codes = []  # For debugging
 
-        try:
-            with pdfplumber.open(course_reg_pdf) as pdf:
-                for page in pdf.pages:
-                    # Try table extraction first
-                    table = page.extract_table()
-                    if table:
-                        for row in table[1:]:  # Skip header
-                            if row and len(row) > 1 and row[1]:
-                                course_code = row[1].strip()
+        # Handle manual course code input
+        if course_codes_input:
+            # Split by common delimiters and clean up
+            raw_codes = re.split(r'[,\n\r\s]+', course_codes_input.strip())
+            for code in raw_codes:
+                if code.strip():
+                    raw_extracted_codes.append(code.strip())
+                    normalized = normalize_course_code(code.strip())
+                    if normalized:
+                        student_course_codes.add(normalized)
+
+        # Handle PDF upload
+        elif course_reg_pdf:
+            try:
+                with pdfplumber.open(course_reg_pdf) as pdf:
+                    for page in pdf.pages:
+                        # Try table extraction first
+                        table = page.extract_table()
+                        if table:
+                            for row in table[1:]:  # Skip header
+                                if row and len(row) > 1 and row[1]:
+                                    course_code = row[1].strip()
+                                    raw_extracted_codes.append(course_code)
+                                    normalized = normalize_course_code(
+                                        course_code)
+                                    if normalized:
+                                        student_course_codes.add(normalized)
+
+                        # Also try text extraction as backup
+                        text = page.extract_text()
+                        if text:
+                            # Find course codes in text using regex
+                            course_matches = re.findall(
+                                r'([A-Z]{3,4})\s?(\d{3})', text.upper())
+                            for match in course_matches:
+                                course_code = f"{match[0]} {match[1]}"
                                 raw_extracted_codes.append(course_code)
                                 normalized = normalize_course_code(course_code)
                                 if normalized:
                                     student_course_codes.add(normalized)
 
-                    # Also try text extraction as backup
-                    text = page.extract_text()
-                    if text:
-                        # Find course codes in text using regex
-                        course_matches = re.findall(
-                            r'([A-Z]{3,4})\s?(\d{3})', text.upper())
-                        for match in course_matches:
-                            course_code = f"{match[0]} {match[1]}"
-                            raw_extracted_codes.append(course_code)
-                            normalized = normalize_course_code(course_code)
-                            if normalized:
-                                student_course_codes.add(normalized)
-
-        except Exception as e:
-            messages.error(request, f'Could not process your PDF. Error: {e}')
-            return render(request, 'core/student_dashboard.html', {'sources': sources})
+            except Exception as e:
+                messages.error(
+                    request, f'Could not process your PDF. Error: {e}')
+                return self.get(request)
 
         if not student_course_codes:
             messages.warning(
@@ -715,42 +758,47 @@ class StudentDashboardView(LoginRequiredMixin, View):
             for day in days_of_week
         }
 
-        # Save course registration history for reuse
-        try:
-            source = TimetableSource.objects.get(id=source_id)
-            save_course_registration_history(
-                user=request.user,
-                source=source,
-                course_codes=list(student_course_codes),
-                program=program or None,
-                level=level or None
-            )
+        # Save course registration history for reuse (only for authenticated users)
+        if request.user.is_authenticated:
+            try:
+                source = TimetableSource.objects.get(id=source_id)
+                save_course_registration_history(
+                    user=request.user,
+                    source=source,
+                    course_codes=list(student_course_codes),
+                    program=program or None,
+                    level=level or None
+                )
 
 
+            except Exception as e:
+                print(f"Error saving history: {e}")
+                # Continue without saving history
 
+        # Get updated history for display (only for authenticated users)
+        history = []
+        if request.user.is_authenticated:
+            history = CourseRegistrationHistory.objects.filter(
+                user=request.user).order_by('-last_used')[:5]
 
+        # Generate download URLs
+        course_codes_str = ','.join(student_course_codes)
+        pdf_url = f"/download-timetable/?source_id={source_id}&codes={course_codes_str}"
+        jpg_url = f"/download-timetable-jpg/?source_id={source_id}&codes={course_codes_str}"
 
-        except Exception as e:
-            print(f"Error saving history: {e}")
-            messages.warning(
-                request,
-                f"⚠️ Timetable generated but history save failed.\n"
-                f"📚 Courses: {len(student_course_codes)} found\n"
-                f"📅 Events: {len(student_events)} generated\n"
-                f"❌ Error: {str(e)}"
-            )
-
-        # Get updated history for display
-        history = CourseRegistrationHistory.objects.filter(
-            user=request.user).order_by('-last_used')[:5]
-
-        return render(request, 'core/student_dashboard.html', {
+        return render(request, 'core/timetable_generator.html', {
             'sources': sources,
             'schedule': schedule,
             'processed_codes': list(student_course_codes),
             'raw_codes': raw_extracted_codes,  # For debugging
             'selected_source_id': int(source_id),
-            'history': history
+            'history': history,
+            'is_authenticated': request.user.is_authenticated,
+            'show_results': True,
+            'pdf_url': pdf_url,
+            'jpg_url': jpg_url,
+            'course_codes_input': course_codes_input,
+            'selected_source': TimetableSource.objects.get(id=source_id)
         })
 
 
@@ -792,16 +840,22 @@ def reuse_course_registration(request, history_id):
         history_list = CourseRegistrationHistory.objects.filter(
             user=request.user).order_by('-last_used')[:5]
 
+        # Generate download URLs
+        course_codes_str = ','.join(course_codes)
+        pdf_url = f"/download-timetable/?source_id={history.source.id}&codes={course_codes_str}"
+        jpg_url = f"/download-timetable-jpg/?source_id={history.source.id}&codes={course_codes_str}"
 
-
-
-
-        return render(request, 'core/student_dashboard.html', {
+        return render(request, 'core/timetable_generator.html', {
             'sources': sources,
             'schedule': schedule,
             'processed_codes': course_codes,
             'selected_source_id': history.source.id,
-            'history': history_list
+            'history': history_list,
+            'is_authenticated': True,
+            'show_results': True,
+            'pdf_url': pdf_url,
+            'jpg_url': jpg_url,
+            'selected_source': history.source
         })
 
     except CourseRegistrationHistory.DoesNotExist:
@@ -815,7 +869,6 @@ def reuse_course_registration(request, history_id):
 # --- UPDATED: download_timetable_pdf with consistent normalization ---
 
 
-@login_required
 def download_timetable_pdf(request):
     source_id = request.GET.get('source_id')
     course_codes_str = request.GET.get('codes', '')
@@ -873,7 +926,6 @@ class PublicTimetablesView(View):
         })
 
 
-@login_required
 def download_timetable_jpg(request):
     """Generate and download timetable as JPG image"""
     source_id = request.GET.get('source_id')
