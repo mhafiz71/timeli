@@ -985,11 +985,12 @@ def create_classic_timetable_jpg(student_events, source, course_codes):
 
     try:
         # Try to use a better font with larger sizes for better readability
-        title_font = ImageFont.truetype("arial.ttf", 32)
-        subtitle_font = ImageFont.truetype("arial.ttf", 18)
-        header_font = ImageFont.truetype("arial.ttf", 16)
-        text_font = ImageFont.truetype("arial.ttf", 14)  # Increased from 11
-        small_font = ImageFont.truetype("arial.ttf", 12)  # Increased from 9
+        title_font = ImageFont.truetype("arial.ttf", 38)  # Increased from 32
+        subtitle_font = ImageFont.truetype(
+            "arial.ttf", 22)  # Increased from 18
+        header_font = ImageFont.truetype("arial.ttf", 20)  # Increased from 16
+        text_font = ImageFont.truetype("arial.ttf", 16)  # Increased from 14
+        small_font = ImageFont.truetype("arial.ttf", 14)  # Increased from 12
     except:
         # Fallback to default font
         title_font = ImageFont.load_default()
@@ -1097,9 +1098,9 @@ def create_classic_timetable_jpg(student_events, source, course_codes):
         # Draw event cards horizontally for this day
         day_events = schedule.get(day, [])
         if day_events:
-            card_width = 200   # Increased width for larger text
-            card_height = 120  # Increased height for day + content
-            card_spacing = 12  # Increased spacing between cards
+            card_width = 220   # Further increased width for larger text
+            card_height = 130  # Further increased height for larger text
+            card_spacing = 15  # Increased spacing between cards
             cards_per_row = events_col_width // (card_width + card_spacing)
 
             for event_idx, event in enumerate(day_events):
@@ -1250,13 +1251,14 @@ def create_modern_timetable_jpg(student_events, source, course_codes, program="B
     add_geometric_patterns(draw, img_width, img_height)
 
     try:
-        # Load fonts
-        title_font = ImageFont.truetype("arial.ttf", 48)
-        subtitle_font = ImageFont.truetype("arial.ttf", 24)
-        day_font = ImageFont.truetype("arial.ttf", 20)
-        course_font = ImageFont.truetype("arial.ttf", 16)
-        time_font = ImageFont.truetype("arial.ttf", 14)
-        detail_font = ImageFont.truetype("arial.ttf", 12)
+        # Load fonts with increased sizes
+        title_font = ImageFont.truetype("arial.ttf", 56)  # Increased from 48
+        subtitle_font = ImageFont.truetype(
+            "arial.ttf", 28)  # Increased from 24
+        day_font = ImageFont.truetype("arial.ttf", 24)  # Increased from 20
+        course_font = ImageFont.truetype("arial.ttf", 20)  # Increased from 16
+        time_font = ImageFont.truetype("arial.ttf", 16)  # Increased from 14
+        detail_font = ImageFont.truetype("arial.ttf", 14)  # Increased from 12
     except:
         # Fallback fonts
         title_font = ImageFont.load_default()
@@ -1266,9 +1268,13 @@ def create_modern_timetable_jpg(student_events, source, course_codes, program="B
         time_font = ImageFont.load_default()
         detail_font = ImageFont.load_default()
 
-    # Header section - dynamic based on user input
-    program_text = program.upper() if program else "BSC COMPUTER SCIENCE"
-    main_title = f"{level.upper()} TIMETABLE" if level else "TIMETABLE"
+    # Header section - dynamic based on user input and timetable type
+    program_text = program.upper() if program else source.display_name.upper()
+
+    if source.timetable_type == 'exam':
+        main_title = f"{level.upper()} EXAM SCHEDULE" if level else "EXAM SCHEDULE"
+    else:
+        main_title = f"{level.upper()} TIMETABLE" if level else "CLASS TIMETABLE"
 
     # Draw program text
     program_bbox = draw.textbbox((0, 0), program_text, font=subtitle_font)
@@ -1300,8 +1306,8 @@ def create_modern_timetable_jpg(student_events, source, course_codes, program="B
     schedule = {day.lower(): sorted([e for e in event_objects if e.day.lower() == day.lower()],
                                     key=lambda x: x.start_time) for day in days}
 
-    # Draw day rows
-    row_height = 120
+    # Draw day rows with increased height for larger text
+    row_height = 140  # Increased from 120
     start_y = container_y + 40
 
     for day_idx, day in enumerate(days):
@@ -1331,10 +1337,11 @@ def create_modern_timetable_jpg(student_events, source, course_codes, program="B
 
             # Limit to 4 events per row
             for event_idx, event in enumerate(day_events[:4]):
-                card_x = event_x + event_idx * (280 + event_spacing)
+                card_x = event_x + event_idx * \
+                    (300 + event_spacing)  # Increased spacing
                 card_y = y + 15
-                card_width = 260
-                card_height = 90
+                card_width = 280  # Increased from 260
+                card_height = 110  # Increased from 90
 
                 # Skip if card would overflow
                 if card_x + card_width > img_width - container_margin - 40:
@@ -1348,33 +1355,63 @@ def create_modern_timetable_jpg(student_events, source, course_codes, program="B
 
                 # Course code (prominent)
                 course_text = event.course_code
-                if len(course_text) > 10:
-                    course_text = course_text[:10]
+                if len(course_text) > 12:  # Increased limit for larger cards
+                    course_text = course_text[:12]
 
                 draw.text((card_x + 15, card_y + 10), course_text,
                           fill='white', font=course_font)
 
                 # Course title (smaller, truncated)
+                y_offset = 35
                 if hasattr(event, 'course_title') and event.course_title:
-                    title_text = event.course_title[:20] + "..." if len(
-                        event.course_title) > 20 else event.course_title
-                    draw.text((card_x + 15, card_y + 30), title_text,
+                    title_text = event.course_title[:25] + "..." if len(
+                        event.course_title) > 25 else event.course_title
+                    draw.text((card_x + 15, y_offset), title_text,
                               fill='#94a3b8', font=detail_font)
+                    y_offset += 20
 
                 # Time
                 time_text = f"{event.start_time.hour}:{event.start_time.minute:02d} - {event.end_time.hour}:{event.end_time.minute:02d}"
-                draw.text((card_x + 15, card_y + 50), time_text,
+                draw.text((card_x + 15, y_offset), time_text,
                           fill='#60a5fa', font=time_font)
+                y_offset += 20
 
-                # Location (bottom right)
-                if event.location:
-                    location_text = event.location[:8] + "..." if len(
-                        event.location) > 8 else event.location
-                    location_bbox = draw.textbbox(
-                        (0, 0), location_text, font=detail_font)
-                    location_width = location_bbox[2] - location_bbox[0]
-                    draw.text((card_x + card_width - location_width - 15, card_y + 70),
-                              location_text, fill='#94a3b8', font=detail_font)
+                # Different content based on timetable type
+                if source.timetable_type == 'exam':
+                    # For exam timetables, show date information
+                    if hasattr(event, 'details') and event.details:
+                        # Extract date from details field
+                        if "Date: " in event.details:
+                            date_part = event.details.split(
+                                "Date: ")[1] if "Date: " in event.details else ""
+                            if date_part:
+                                # Clean up date text
+                                date_text = date_part.split(
+                                    ",")[0] if "," in date_part else date_part
+                                date_text = date_text[:15] + \
+                                    "..." if len(date_text) > 15 else date_text
+                                draw.text(
+                                    (card_x + 15, y_offset), f"📅 {date_text}", fill='#fbbf24', font=detail_font)
+
+                    # Location for exams (venue)
+                    if event.location:
+                        location_text = event.location[:12] + "..." if len(
+                            event.location) > 12 else event.location
+                        location_bbox = draw.textbbox(
+                            (0, 0), location_text, font=detail_font)
+                        location_width = location_bbox[2] - location_bbox[0]
+                        draw.text((card_x + card_width - location_width - 15, card_y + card_height - 20),
+                                  location_text, fill='#94a3b8', font=detail_font)
+                else:
+                    # For regular timetables, show location
+                    if event.location:
+                        location_text = event.location[:12] + "..." if len(
+                            event.location) > 12 else event.location
+                        location_bbox = draw.textbbox(
+                            (0, 0), location_text, font=detail_font)
+                        location_width = location_bbox[2] - location_bbox[0]
+                        draw.text((card_x + card_width - location_width - 15, card_y + card_height - 20),
+                                  location_text, fill='#94a3b8', font=detail_font)
 
     # Save image
     img_buffer = BytesIO()
