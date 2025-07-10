@@ -274,21 +274,34 @@
                             <div class="space-y-2">
                                 {% for event in events %}
                                 <div class="bg-blue-500/20 border border-blue-400/30 rounded-lg p-4">
-                                    <div class="font-medium text-blue-100 text-base mb-2">
+                                    <!-- Course Code (Bold) -->
+                                    <div class="font-bold text-blue-100 text-lg mb-2">
                                         {{ event.course_code }}
                                     </div>
+<!-- Time -->
                                     <div class="text-blue-200 text-sm mb-2">
-                                        {{ event.start_time|time:"H:i" }} - {{ event.end_time|time:"H:i" }}
+                                        ⏰ {{ event.start_time|time:"H:i" }} - {{ event.end_time|time:"H:i" }}
                                     </div>
-                                    {% if event.location %}
-                                    <div class="text-blue-300 text-sm">
-                                        📍 {{ event.location }}
-                                    </div>
-                                    {% endif %}
-                                    {% if event.lecturer %}
-                                    <div class="text-blue-300 text-sm">
-                                        👨‍🏫 {{ event.lecturer }}
-                                    </div>
+<!-- Conditional Content Based on Timetable Type -->
+{% if selected_source.timetable_type == 'exam' %}
+<!-- For Exam Timetables: Show Date -->
+{% if event.details and 'Date:' in event.details %}
+<div class="text-yellow-300 text-sm">
+    📅 {{ event.details|cut:"Date: "|truncatechars:40 }}
+</div>
+{% endif %}
+{% else %}
+<!-- For Teaching Timetables: Show Venue and Lecturer -->
+                                        {% if event.location %}
+                                        <div class="text-blue-300 text-sm">
+                                            📍 {{ event.location }}
+                                        </div>
+                                        {% endif %}
+                                        {% if event.lecturer %}
+                                        <div class="text-blue-300 text-sm">
+                                            👨‍🏫 {{ event.lecturer }}
+                                        </div>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                                 {% endfor %}
