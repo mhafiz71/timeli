@@ -234,9 +234,33 @@
                         <a href="{{ pdf_url }}" class="btn-secondary px-4 py-2 rounded-lg text-sm font-medium">
                             📄 Download PDF
                         </a>
-                        <a href="{{ jpg_url }}" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium">
-                            🖼️ Download JPG
-                        </a>
+                        <!-- JPG Download with Format Options -->
+                        <div class="relative" x-data="{ jpgOpen: false }">
+                            <button @click="jpgOpen = !jpgOpen" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center">
+                                🖼️ Download JPG
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                                </button>
+                                
+                                <!-- Dropdown Menu -->
+                                <div x-show="jpgOpen" @click.away="jpgOpen = false" x-transition:enter="transition ease-out duration-100"
+                                    x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100"
+                                    x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100"
+                                    x-transition:leave-end="transform opacity-0 scale-95"
+                                    class="absolute right-0 mt-2 w-48 glass rounded-lg shadow-lg z-10">
+                                    <div class="py-1">
+                                        <a href="{{ jpg_url }}&format=modern&program={{ program|urlencode }}&level={{ level|urlencode }}"
+                                            class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition-colors">
+                                            🎨 Modern Design
+                                        </a>
+                                        <a href="{{ jpg_url }}&format=classic"
+                                            class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition-colors">
+                                            📋 Classic Layout
+                                    </a>
+                                </div>
+                                </div>
+                                </div>
                     </div>
                 </div>
 

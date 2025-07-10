@@ -930,6 +930,7 @@ def download_timetable_jpg(request):
     """Generate and download timetable as JPG image"""
     source_id = request.GET.get('source_id')
     course_codes_str = request.GET.get('codes', '')
+    format_type = request.GET.get('format', 'modern')  # 'modern' or 'classic'
 
     course_codes = [normalize_course_code(
         code) for code in course_codes_str.split(',') if code.strip()]
@@ -955,6 +956,19 @@ def download_timetable_jpg(request):
     except TimetableSource.DoesNotExist:
         return HttpResponse("Timetable source not found.", status=404)
 
+    # Get program and level from request for modern format
+    program = request.GET.get('program', 'BSC COMPUTER SCIENCE')
+    level = request.GET.get('level', 'SECOND SEMESTER')
+
+    # Choose generation method based on format
+    if format_type == 'modern':
+        return create_modern_timetable_jpg(student_events, source, course_codes, program, level)
+    else:
+        return create_classic_timetable_jpg(student_events, source, course_codes)
+
+
+def create_classic_timetable_jpg(student_events, source, course_codes):
+    """Create classic JPG format timetable"""
     # Create image using PIL - Different layouts for exam vs teaching
     img_width, img_height = 1400, 900
 
@@ -1208,3 +1222,207 @@ def download_timetable_jpg(request):
     response = HttpResponse(img_buffer.getvalue(), content_type='image/jpeg')
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     return response
+
+
+def create_modern_timetable_jpg(student_events, source, course_codes, program="BSC COMPUTER SCIENCE", level="SECOND SEMESTER"):
+    """Create modern JPG format timetable with dark teal background and geometric patterns"""
+    from PIL import Image, ImageDraw, ImageFont
+    from io import BytesIO
+
+    # Modern design dimensions
+    img_width, img_height = 1600, 1000
+
+    # Create image with dark teal gradient background
+    img = Image.new('RGB', (img_width, img_height), color='#0f172a')
+    draw = ImageDraw.Draw(img)
+
+    # Create gradient background
+    for y in range(img_height):
+        # Gradient from dark blue to teal
+        ratio = y / img_height
+        r = int(15 + (20 - 15) * ratio)  # 0f -> 14
+        g = int(23 + (55 - 23) * ratio)  # 17 -> 37
+        b = int(42 + (74 - 42) * ratio)  # 2a -> 4a
+        color = f'#{r:02x}{g:02x}{b:02x}'
+        draw.line([(0, y), (img_width, y)], fill=color)
+
+    # Add geometric patterns and sparkles
+    add_geometric_patterns(draw, img_width, img_height)
+
+    try:
+        # Load fonts
+        title_font = ImageFont.truetype("arial.ttf", 48)
+        subtitle_font = ImageFont.truetype("arial.ttf", 24)
+        day_font = ImageFont.truetype("arial.ttf", 20)
+        course_font = ImageFont.truetype("arial.ttf", 16)
+        time_font = ImageFont.truetype("arial.ttf", 14)
+        detail_font = ImageFont.truetype("arial.ttf", 12)
+    except:
+        # Fallback fonts
+        title_font = ImageFont.load_default()
+        subtitle_font = ImageFont.load_default()
+        day_font = ImageFont.load_default()
+        course_font = ImageFont.load_default()
+        time_font = ImageFont.load_default()
+        detail_font = ImageFont.load_default()
+
+    # Header section - dynamic based on user input
+    program_text = program.upper() if program else "BSC COMPUTER SCIENCE"
+    main_title = f"{level.upper()} TIMETABLE" if level else "TIMETABLE"
+
+    # Draw program text
+    program_bbox = draw.textbbox((0, 0), program_text, font=subtitle_font)
+    program_width = program_bbox[2] - program_bbox[0]
+    draw.text(((img_width - program_width) // 2, 40),
+              program_text, fill='#94a3b8', font=subtitle_font)
+
+    # Draw main title
+    title_bbox = draw.textbbox((0, 0), main_title, font=title_font)
+    title_width = title_bbox[2] - title_bbox[0]
+    draw.text(((img_width - title_width) // 2, 80),
+              main_title, fill='white', font=title_font)
+
+    # Create modern card container
+    container_y = 160
+    container_height = 700
+    container_margin = 80
+
+    # Draw glass-like container
+    draw.rounded_rectangle(
+        [container_margin, container_y, img_width -
+            container_margin, container_y + container_height],
+        radius=20, fill='#1e293b', outline='#334155', width=2
+    )
+
+    # Process events by day
+    days = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
+    event_objects = [EventObject(e) for e in student_events]
+    schedule = {day.lower(): sorted([e for e in event_objects if e.day.lower() == day.lower()],
+                                    key=lambda x: x.start_time) for day in days}
+
+    # Draw day rows
+    row_height = 120
+    start_y = container_y + 40
+
+    for day_idx, day in enumerate(days):
+        y = start_y + day_idx * row_height
+
+        # Draw day background
+        if day_idx % 2 == 0:
+            day_bg = '#334155'
+        else:
+            day_bg = '#475569'
+
+        draw.rounded_rectangle(
+            [container_margin + 20, y, img_width -
+                container_margin - 20, y + row_height - 10],
+            radius=10, fill=day_bg, outline='#64748b', width=1
+        )
+
+        # Draw day label
+        draw.text((container_margin + 40, y + 45),
+                  day, fill='white', font=day_font)
+
+        # Draw events for this day
+        day_events = schedule.get(day.lower(), [])
+        if day_events:
+            event_x = container_margin + 200
+            event_spacing = 20
+
+            # Limit to 4 events per row
+            for event_idx, event in enumerate(day_events[:4]):
+                card_x = event_x + event_idx * (280 + event_spacing)
+                card_y = y + 15
+                card_width = 260
+                card_height = 90
+
+                # Skip if card would overflow
+                if card_x + card_width > img_width - container_margin - 40:
+                    break
+
+                # Draw event card with modern styling
+                draw.rounded_rectangle(
+                    [card_x, card_y, card_x + card_width, card_y + card_height],
+                    radius=8, fill='#1e293b', outline='#3b82f6', width=2
+                )
+
+                # Course code (prominent)
+                course_text = event.course_code
+                if len(course_text) > 10:
+                    course_text = course_text[:10]
+
+                draw.text((card_x + 15, card_y + 10), course_text,
+                          fill='white', font=course_font)
+
+                # Course title (smaller, truncated)
+                if hasattr(event, 'course_title') and event.course_title:
+                    title_text = event.course_title[:20] + "..." if len(
+                        event.course_title) > 20 else event.course_title
+                    draw.text((card_x + 15, card_y + 30), title_text,
+                              fill='#94a3b8', font=detail_font)
+
+                # Time
+                time_text = f"{event.start_time.hour}:{event.start_time.minute:02d} - {event.end_time.hour}:{event.end_time.minute:02d}"
+                draw.text((card_x + 15, card_y + 50), time_text,
+                          fill='#60a5fa', font=time_font)
+
+                # Location (bottom right)
+                if event.location:
+                    location_text = event.location[:8] + "..." if len(
+                        event.location) > 8 else event.location
+                    location_bbox = draw.textbbox(
+                        (0, 0), location_text, font=detail_font)
+                    location_width = location_bbox[2] - location_bbox[0]
+                    draw.text((card_x + card_width - location_width - 15, card_y + 70),
+                              location_text, fill='#94a3b8', font=detail_font)
+
+    # Save image
+    img_buffer = BytesIO()
+    img.save(img_buffer, format='JPEG', quality=95)
+    img_buffer.seek(0)
+
+    # Generate filename
+    filename = f"modern_timetable_{source.display_name.replace(' ', '_')}.jpg"
+
+    response = HttpResponse(img_buffer.getvalue(), content_type='image/jpeg')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    return response
+
+
+def add_geometric_patterns(draw, width, height):
+    """Add geometric patterns and sparkles to the background"""
+    import random
+
+    # Add sparkle effects
+    for _ in range(15):
+        x = random.randint(50, width - 50)
+        y = random.randint(50, height - 50)
+        size = random.randint(3, 8)
+
+        # Draw sparkle as a cross
+        draw.line([(x - size, y), (x + size, y)], fill='#fbbf24', width=2)
+        draw.line([(x, y - size), (x, y + size)], fill='#fbbf24', width=2)
+
+    # Add geometric shapes
+    for _ in range(8):
+        x = random.randint(100, width - 100)
+        y = random.randint(100, height - 100)
+        size = random.randint(20, 60)
+
+        # Draw diamond shapes
+        points = [
+            (x, y - size//2),
+            (x + size//2, y),
+            (x, y + size//2),
+            (x - size//2, y)
+        ]
+        draw.polygon(points, fill=None, outline='#334155', width=1)
+
+    # Add circuit-like lines
+    for _ in range(5):
+        x1 = random.randint(0, width//2)
+        y1 = random.randint(0, height)
+        x2 = random.randint(width//2, width)
+        y2 = random.randint(0, height)
+
+        draw.line([(x1, y1), (x2, y2)], fill='#1e293b', width=1)
