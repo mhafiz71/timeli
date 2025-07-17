@@ -42,10 +42,10 @@ class TimetableSource(models.Model):
     OTHER = 'other'
 
     TYPE_CHOICES = [
-        (TEACHING, 'Teaching Schedule'),
-        (EXAM, 'Exam Schedule'),
-        (PERSONAL, 'Personal Schedule'),
-        (EVENT, 'Event Schedule'),
+        (TEACHING, 'Teaching'),
+        (EXAM, 'Exam'),
+        (PERSONAL, 'Personal'),
+        (EVENT, 'Event'),
         (OTHER, 'Other'),
     ]
 
