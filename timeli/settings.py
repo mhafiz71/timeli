@@ -100,7 +100,7 @@ if DATABASE_URL:
         DATABASES = {
             'default': dj_database_url.parse(DATABASE_URL)
         }
-        print("✓ Using PostgreSQL database")
+        print("Using PostgreSQL database")
     except ImportError as e:
         # Fallback to SQLite if psycopg2 is not available
         print(
@@ -128,7 +128,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-    print("✓ Using SQLite database (development)")
+    print("Using SQLite database (development)")
 
 
 # Password validation

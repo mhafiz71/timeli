@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Timetable - Minimalist</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0.5in;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 9pt;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #ffffff;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            background: #ffffff;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            background: #ffffff;
+            border-bottom: 2px solid #e8e8e8;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 32pt;
+            font-weight: 300;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 11pt;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .generated-by {
+            font-size: 8pt;
+            color: #95a5a6;
+            font-weight: 300;
+            margin-top: 10px;
+        }
+
+        .table-container {
+            padding: 0;
+        }
+
+        .main-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #ffffff;
+        }
+
+        .main-table th {
+            background: #ffffff;
+            color: #2c3e50;
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 10pt;
+            border-bottom: 3px solid #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .day-header {
+            width: 18%;
+        }
+
+        .events-header {
+            width: 82%;
+        }
+
+        .main-table td {
+            border-bottom: 1px solid #ecf0f1;
+            vertical-align: top;
+            padding: 25px 15px;
+        }
+
+        .main-table tr:last-child td {
+            border-bottom: 2px solid #e8e8e8;
+        }
+
+        .day-cell {
+            background: #ffffff;
+            color: #2c3e50;
+            font-weight: 500;
+            text-align: left;
+            padding: 25px 15px;
+            font-size: 11pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-right: 1px solid #ecf0f1;
+        }
+
+        .events-cell {
+            padding: 25px 15px;
+            background: #ffffff;
+        }
+
+        .events-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .event-block {
+            background: #ffffff;
+            color: #2c3e50;
+            padding: 15px 18px;
+            border-left: 4px solid #34495e;
+            border-radius: 0;
+            font-size: 8pt;
+            line-height: 1.6;
+            box-shadow: none;
+            border-top: 1px solid #ecf0f1;
+            border-right: 1px solid #ecf0f1;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .course-code {
+            font-weight: 600;
+            font-size: 10pt;
+            margin-bottom: 6px;
+            color: #2c3e50;
+            letter-spacing: 0.5px;
+        }
+
+        .time {
+            font-size: 8pt;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+
+        .details {
+            font-size: 7pt;
+            color: #95a5a6;
+            margin-bottom: 4px;
+            line-height: 1.5;
+        }
+
+        .details:last-child {
+            margin-bottom: 0;
+        }
+
+        .details .emoji {
+            font-size: 7pt;
+            margin-right: 4px;
+        }
+
+        .no-classes {
+            text-align: center;
+            color: #bdc3c7;
+            font-style: italic;
+            padding: 40px;
+            font-size: 9pt;
+            background: #ffffff;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: #ffffff;
+            font-size: 8pt;
+            color: #95a5a6;
+            font-weight: 300;
+            border-top: 2px solid #e8e8e8;
+            margin-top: 30px;
+        }
+
+        /* Event type variations - subtle */
+        .event-block.lecture {
+            border-left-color: #34495e;
+        }
+
+        .event-block.lab {
+            border-left-color: #27ae60;
+        }
+
+        .event-block.exam {
+            border-left-color: #e74c3c;
+        }
+
+        .event-block.tutorial {
+            border-left-color: #8e44ad;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">TIMETABLE</div>
+            <div class="subtitle">{{ source_name }}</div>
+            <div class="generated-by">Generated by Timeli</div>
+        </div>
+
+        <div class="table-container">
+            <table class="main-table">
+                <thead>
+                    <tr>
+                        <th class="day-header">Day</th>
+                        <th class="events-header">Schedule</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day, events in schedule.items %}
+                    <tr>
+                        <td class="day-cell">{{ day|upper }}</td>
+                        <td class="events-cell">
+                            {% if events %}
+                            <div class="events-container">
+                                {% for event in events %}
+                                <div class="event-block{% if event.event_type %} {{ event.event_type|lower }}{% endif %}">
+                                    <div class="course-code">{{ event.course_code }}</div>
+                                    <div class="time">{{ event.start_time|time:"H:i" }} - {{ event.end_time|time:"H:i" }}</div>
+                                    
+                                    {% if source.timetable_type == 'exam' %}
+                                    {% if event.details and 'Date:' in event.details %}
+                                    <div class="details">
+                                        <span class="emoji">📅</span>{{ event.details|slice:"25:" }}
+                                    </div>
+                                    {% endif %}
+                                    {% else %}
+                                    {% if event.location %}
+                                    <div class="details">
+                                        <span class="emoji">📍</span>{{ event.location }}
+                                    </div>
+                                    {% endif %}
+                                    {% if event.lecturer %}
+                                    <div class="details">
+                                        <span class="emoji">👨‍🏫</span>{{ event.lecturer }}
+                                    </div>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="no-classes">No classes scheduled</div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            Powered by Timeli
+        </div>
+    </div>
+</body>
+</html>
+

@@ -872,7 +872,22 @@ def reuse_course_registration(request, history_id):
 def download_timetable_pdf(request):
     source_id = request.GET.get('source_id')
     course_codes_str = request.GET.get('codes', '')
-    template_type = request.GET.get('template', 'modern')  # Default to modern
+    template_type = request.GET.get('template', 'grid')  # Default to grid
+    
+    # Template registry - maps template names to template paths
+    TEMPLATE_REGISTRY = {
+        'grid': 'core/timetable_pdf_grid.html',  # Original grid template
+        'minimalist': 'core/timetables/pdf/minimalist.html',
+        'colorful': 'core/timetables/pdf/colorful.html',
+        'academic': 'core/timetables/pdf/academic.html',
+        'modern_card': 'core/timetables/pdf/modern_card.html',
+        'modern': 'core/timetables/pdf/modern_card.html',  # Alias
+        'compact': 'core/timetables/pdf/compact.html',
+    }
+    
+    # Validate and get template path
+    template_path = TEMPLATE_REGISTRY.get(template_type, TEMPLATE_REGISTRY['grid'])
+    
     course_codes = [normalize_course_code(
         code) for code in course_codes_str.split(',') if code.strip()]
 
@@ -895,8 +910,7 @@ def download_timetable_pdf(request):
     schedule = {day: sorted([e for e in event_objects if e.day == day],
                             key=lambda x: x.start_time) for day in days_of_week}
 
-    # Only grid template available
-    template_path = 'core/timetable_pdf_grid.html'
+    # Load selected template
     template = get_template(template_path)
     html = template.render(
         {'schedule': schedule, 'days_of_week': days_of_week, 'source_name': source.display_name, 'template_type': template_type, 'source': source})
@@ -906,7 +920,8 @@ def download_timetable_pdf(request):
     if not pdf.err:
         response = HttpResponse(
             result.getvalue(), content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="my_timetable.pdf"'
+        filename = f"timetable_{template_type}_{source.display_name.replace(' ', '_')}.pdf"
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
         return response
 
     return HttpResponse("Error Generating PDF", status=500)

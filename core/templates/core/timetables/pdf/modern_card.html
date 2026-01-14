@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Timetable - Modern Card</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0.3in;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            font-size: 8pt;
+            line-height: 1.5;
+            color: #ffffff;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 35px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .title {
+            font-size: 38pt;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 13pt;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .generated-by {
+            font-size: 9pt;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+            margin-top: 8px;
+        }
+
+        .table-container {
+            padding: 25px;
+            background: transparent;
+        }
+
+        .main-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 15px;
+            background: transparent;
+        }
+
+        .main-table thead {
+            display: none;
+        }
+
+        .main-table td {
+            border: none;
+            vertical-align: top;
+            padding: 0;
+        }
+
+        .day-cell {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(147, 51, 234, 0.3) 100%);
+            color: #ffffff;
+            font-weight: 700;
+            text-align: center;
+            padding: 18px 20px;
+            font-size: 12pt;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 16px;
+            width: 16%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .events-cell {
+            padding: 0;
+            background: transparent;
+        }
+
+        .events-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 14px;
+            padding-left: 20px;
+        }
+
+        .event-block {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            padding: 16px 18px;
+            border-radius: 16px;
+            font-size: 7pt;
+            line-height: 1.5;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6 0%, #9333ea 100%);
+        }
+
+        .course-code {
+            font-weight: 700;
+            font-size: 10pt;
+            margin-bottom: 6px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .time {
+            font-size: 7pt;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 8px;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.2);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .details {
+            font-size: 6pt;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .details:last-child {
+            margin-bottom: 0;
+        }
+
+        .details .emoji {
+            font-size: 7pt;
+            margin-right: 4px;
+        }
+
+        .no-classes {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            padding: 30px;
+            font-size: 9pt;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            margin-left: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px 20px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+            font-size: 9pt;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Event type color variations */
+        .event-block.lecture::before { background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%); }
+        .event-block.lab::before { background: linear-gradient(90deg, #10b981 0%, #059669 100%); }
+        .event-block.exam::before { background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); }
+        .event-block.tutorial::before { background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); }
+
+        @media print {
+            body {
+                background: #0f172a;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">My Timetable</div>
+            <div class="subtitle">{{ source_name }}</div>
+            <div class="generated-by">Generated by Timeli</div>
+        </div>
+
+        <div class="table-container">
+            <table class="main-table">
+                <thead>
+                    <tr>
+                        <th class="day-header">Day</th>
+                        <th class="events-header">Schedule</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day, events in schedule.items %}
+                    <tr>
+                        <td class="day-cell">{{ day|upper }}</td>
+                        <td class="events-cell">
+                            {% if events %}
+                            <div class="events-container">
+                                {% for event in events %}
+                                <div class="event-block{% if event.event_type %} {{ event.event_type|lower }}{% endif %}">
+                                    <div class="course-code">{{ event.course_code }}</div>
+                                    <div class="time">{{ event.start_time|time:"H:i" }} - {{ event.end_time|time:"H:i" }}</div>
+                                    
+                                    {% if source.timetable_type == 'exam' %}
+                                    {% if event.details and 'Date:' in event.details %}
+                                    <div class="details">
+                                        <span class="emoji">📅</span>{{ event.details|slice:"25:" }}
+                                    </div>
+                                    {% endif %}
+                                    {% else %}
+                                    {% if event.location %}
+                                    <div class="details">
+                                        <span class="emoji">📍</span>{{ event.location }}
+                                    </div>
+                                    {% endif %}
+                                    {% if event.lecturer %}
+                                    <div class="details">
+                                        <span class="emoji">👨‍🏫</span>{{ event.lecturer }}
+                                    </div>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="no-classes">No classes scheduled</div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            Powered by Timeli
+        </div>
+    </div>
+</body>
+</html>
+
